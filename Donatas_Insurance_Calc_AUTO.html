@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="UTF-8">
+<title>Donatas Insurance Calc SUPER – Auto Conversion</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --bg:#eef1f5;
+  --card:#ffffff;
+  --text:#0f172a;
+  --header:#111827;
+  --header-text:#f9fafb;
+  --border:#cbd5e1;
+}
+body.dark{
+  --bg:#020617;
+  --card:#0f172a;
+  --text:#e5e7eb;
+  --header:#000000;
+  --header-text:#f9fafb;
+  --border:#475569;
+}
+
+*{box-sizing:border-box;}
+
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+header{
+    background:var(--header);
+    color:var(--header-text);
+    padding:10px 16px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+header h1{
+    font-size:18px;
+    margin:0;
+    font-weight:700;
+}
+
+header .spacer{
+    flex:1;
+}
+header button{
+    padding:6px 10px;
+    border:none;
+    border-radius:999px;
+    background:#334155;
+    color:#e5e7eb;
+    cursor:pointer;
+    font-size:13px;
+}
+
+.container{
+    max-width:1200px;
+    margin:0 auto;
+    padding:16px;
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+}
+
+.card{
+    background:var(--card);
+    border-radius:12px;
+    border:1px solid var(--border);
+    padding:16px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.18);
+    flex:1 1 360px;
+    min-width:320px;
+}
+
+h2{
+    margin:0 0 10px 0;
+    font-size:18px;
+}
+
+label{
+    display:block;
+    font-size:12px;
+    font-weight:600;
+    margin-top:8px;
+}
+
+input, select, textarea{
+    width:100%;
+    padding:8px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+    font-size:13px;
+}
+
+textarea{
+    min-height:130px;
+    resize:vertical;
+    font-family:Consolas, monospace;
+}
+
+button.action{
+    width:100%;
+    padding:9px;
+    margin-top:10px;
+    border:none;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    font-weight:700;
+    cursor:pointer;
+    font-size:14px;
+}
+button.action:hover{
+    background:#1d4ed8;
+}
+
+.row{
+    display:flex;
+    gap:10px;
+}
+.row > div{
+    flex:1;
+}
+
+.value{
+    font-weight:700;
+}
+.green{ color:#22c55e; }
+.red{ color:#ef4444; }
+
+.checkbox-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:6px;
+    font-size:12px;
+}
+.checkbox-row label{
+    margin-top:0;
+    font-weight:400;
+}
+
+.pdf-controls{
+    margin-top:12px;
+    display:flex;
+    gap:8px;
+    align-items:center;
+    font-size:12px;
+}
+.pdf-controls select{
+    width:auto;
+    min-width:140px;
+}
+
+@media print{
+    body{
+        background:#ffffff;
+        color:#000000;
+    }
+    header, .pdf-controls{ display:none !important; }
+    .card{
+        box-shadow:none;
+        border:1px solid #e5e7eb;
+    }
+    body.pdf-calcs #clientCard{ display:none !important; }
+    body.pdf-client #calcCard{ display:none !important; }
+    body.pdf-both #calcCard, body.pdf-both #clientCard{ display:block !important; }
+}
+
+.signature { 
+    text-align: center; 
+    color: #888; 
+    font-size: 12px; 
+    margin-top: 25px; 
+    margin-bottom: 20px; 
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Insurance Calculator (Auto Currency)</h1>
+    <div class="spacer"></div>
+    <button type="button" onclick="toggleDark()">🌙 / ☀️</button>
+</header>
+
+<div class="container">
+
+    <!-- Skaičiuoklė -->
+    <div class="card" id="calcCard">
+        <h2>Skaičiuoklė</h2>
+
+        <label>Invoice valiuta</label>
+        <select id="invoiceCurrency">
+            <option>USD</option>
+            <option>EUR</option>
+            <option>PLN</option>
+            <option>GBP</option>
+            <option>CHF</option>
+            <option>TRY</option>
+            <option>KZT</option>
+            <option>CNY</option>
+            <option>CAD</option>
+            <option>AUD</option>
+        </select>
+
+        <label>Invoice suma (ta valiuta)</label>
+        <input type="number" id="invoiceAmount" placeholder="pvz. 625000">
+
+        <label>Invoice suma EUR (automatiskai per ECB/LB)</label>
+        <input type="number" id="invoiceEUR" readonly style="background:#e2e8f0;">
+
+        <div class="row">
+            <div>
+                <label>Brokerio %</label>
+                <select id="brokerPercent">
+                    <option value="0.07">0,07 %</option>
+                    <option value="0.08">0,08 %</option>
+                    <option value="0.10">0,10 %</option>
+                    <option value="0.12">0,12 %</option>
+                    <option value="custom">Kitas</option>
+                </select>
+            </div>
+            <div>
+                <label>Brokerio % (jei Kitas)</label>
+                <input type="number" id="brokerCustom" placeholder="pvz. 0.09" disabled>
+            </div>
+        </div>
+
+        <div class="row">
+            <div>
+                <label>Tavo % klientui</label>
+                <select id="myPercent">
+                    <option value="0.23">0,23 %</option>
+                    <option value="0.24" selected>0,24 %</option>
+                    <option value="0.25">0,25 %</option>
+                    <option value="custom">Kitas</option>
+                </select>
+            </div>
+            <div>
+                <label>Tavo % (jei Kitas)</label>
+                <input type="number" id="myCustom" placeholder="pvz. 0.27" disabled>
+            </div>
+        </div>
+
+        <button class="action" type="button" onclick="calc()">Skaičiuoti</button>
+
+        <h3>Rezultatai</h3>
+        <p>Invoice EUR: <span id="resInvoiceEUR" class="value">–</span></p>
+        <p>Savikaina (brokeris): <span id="resCost" class="value">–</span></p>
+        <p>Kaina klientui: <span id="resClient" class="value">–</span></p>
+        <p>Pelnas: <span id="resProfit" class="value">–</span></p>
+
+        <h4>AON vs Legator palyginimui</h4>
+        <p>AON 0,07 %: <span id="resAON" class="value">–</span></p>
+        <p>Legator 0,10 %: <span id="resLeg" class="value">–</span></p>
+    </div>
+
+    <!-- Kliento tekstas -->
+    <div class="card" id="clientCard">
+        <h2>Tekstas klientui</h2>
+
+        <label>Kalba / Language</label>
+        <select id="lang">
+            <option value="LT">Lietuvių</option>
+            <option value="EN">English</option>
+        </select>
+
+        <label>Ką rodyti?</label>
+        <div class="checkbox-row">
+            <label><input type="checkbox" id="showEUR" checked> Rodyti kainą EUR</label>
+            <label><input type="checkbox" id="showUSD" checked> Rodyti kainą USD</label>
+            <label><input type="checkbox" id="showDate" checked> Rodyti datą</label>
+            <label><input type="checkbox" id="showInvoice" checked> Rodyti invoice eilutę</label>
+        </div>
+
+        <label>Kursas EUR → USD (1 EUR = ? USD, automatinis nepanaikintas, jei nori rankinio)</label>
+        <input type="number" id="rateEurUsd" step="0.0001" placeholder="pvz. 1.1550">
+
+        <button class="action" type="button" onclick="generateClientText()">Generuoti tekstą klientui</button>
+
+        <label>Tekstas klientui (copy–paste)</label>
+        <textarea id="clientText"></textarea>
+        <button class="action" type="button" onclick="copyClientText()">Kopijuoti tekstą</button>
+
+        <div class="pdf-controls">
+            <span>PDF turinys:</span>
+            <select id="pdfMode">
+                <option value="both">Skaičiuoklė + tekstas</option>
+                <option value="calc">Tik skaičiuoklė</option>
+                <option value="client">Tik tekstas klientui</option>
+            </select>
+            <button type="button" onclick="generatePDF()" style="width:auto;padding:6px 10px;">PDF (Print)</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+let lastClientEUR = null;
+
+// DARK MODE
+function applyDarkFromStorage(){
+    const d = localStorage.getItem("don_darkmode");
+    if(d === "1"){
+        document.body.classList.add("dark");
+    }
+}
+function toggleDark(){
+    document.body.classList.toggle("dark");
+    localStorage.setItem("don_darkmode", document.body.classList.contains("dark") ? "1" : "0");
+}
+
+// FORMAT HELPERS
+function formatEUR(x){
+    return x.toLocaleString("lt-LT",{minimumFractionDigits:2, maximumFractionDigits:2}) + " EUR";
+}
+function formatUSD(x){
+    return x.toLocaleString("en-US",{minimumFractionDigits:2, maximumFractionDigits:2}) + " USD";
+}
+
+// --------- AUTOMATINIS KONVERTAVIMAS (ECB) -----------
+async function autoConvert() {
+    const currency = document.getElementById("invoiceCurrency").value;
+    const amount = parseFloat(document.getElementById("invoiceAmount").value);
+    const eurBox = document.getElementById("invoiceEUR");
+
+    if(!amount || amount <= 0){
+        eurBox.value = "";
+        return;
+    }
+
+    // jei valiuta EUR – nereikia konvertuoti
+    if(currency === "EUR"){
+        eurBox.value = amount.toFixed(2);
+        return;
+    }
+
+    try {
+        const resp = await fetch("https://api.frankfurter.app/latest?from=" + currency + "&to=EUR");
+        const data = await resp.json();
+        const rate = data.rates["EUR"];
+
+        const eur = amount * rate;
+        eurBox.value = eur.toFixed(4);
+
+    } catch(err){
+        eurBox.value = "";
+        alert("Nepavyko gauti oficialaus ECB kurso.");
+    }
+}
+
+// prijungiame keitimą
+document.getElementById("invoiceCurrency").addEventListener("change", autoConvert);
+document.getElementById("invoiceAmount").addEventListener("input", autoConvert);
+
+// -------------------------------------------------------
+
+// MAIN CALC
+function calc(){
+    const invoiceEUR = parseFloat(document.getElementById("invoiceEUR").value);
+    if(!invoiceEUR || invoiceEUR <= 0){
+        alert("Invoice EUR nėra gautas. Patikrink valiutą ir sumą.");
+        return;
+    }
+
+    let brokerSel = document.getElementById("brokerPercent").value;
+    let brokerP = 0;
+    if(brokerSel === "custom"){
+        const v = parseFloat(document.getElementById("brokerCustom").value);
+        if(!v && v !== 0){
+            alert("Įvesk brokerio procentą.");
+            return;
+        }
+        brokerP = v/100.0;
+    } else {
+        brokerP = parseFloat(brokerSel)/100.0;
+    }
+
+    let mySel = document.getElementById("myPercent").value;
+    let myP = 0;
+    if(mySel === "custom"){
+        const v = parseFloat(document.getElementById("myCustom").value);
+        if(!v && v !== 0){
+            alert("Įvesk savo procentą.");
+            return;
+        }
+        myP = v/100.0;
+    } else {
+        myP = parseFloat(mySel)/100.0;
+    }
+
+    const cost = invoiceEUR * brokerP;
+    const client = invoiceEUR * myP;
+    const profit = client - cost;
+
+    lastClientEUR = client;
+
+    const aon = invoiceEUR * 0.0007;
+    const leg = invoiceEUR * 0.0010;
+
+    document.getElementById("resInvoiceEUR").textContent = formatEUR(invoiceEUR);
+    document.getElementById("resCost").textContent = formatEUR(cost);
+    document.getElementById("resClient").textContent = formatEUR(client);
+
+    const pEl = document.getElementById("resProfit");
+    pEl.textContent = formatEUR(profit);
+    pEl.className = "value " + (profit >= 0 ? "green" : "red");
+
+    document.getElementById("resAON").textContent = formatEUR(aon);
+    document.getElementById("resLeg").textContent = formatEUR(leg);
+
+    saveState();
+}
+
+// CLIENT TEXT – PATAISYTA VERSIJA (be string klaidos)
+function generateClientText(){
+    const lang = document.getElementById("lang").value;
+    const showEUR = document.getElementById("showEUR").checked;
+    const showUSD = document.getElementById("showUSD").checked;
+    const showDate = document.getElementById("showDate").checked;
+    const showInvoice = document.getElementById("showInvoice").checked;
+
+    const invoiceAmount = document.getElementById("invoiceAmount").value;
+    const invoiceCurrency = document.getElementById("invoiceCurrency").value;
+    const invoiceEUR = parseFloat(document.getElementById("invoiceEUR").value);
+
+    if(!lastClientEUR){
+        if(invoiceEUR){ calc(); }
+        if(!lastClientEUR){
+            alert("Pirmiausia paskaičiuok draudimo kainą (Skaičiuoti).");
+            return;
+        }
+    }
+
+    let rate = parseFloat(document.getElementById("rateEurUsd").value);
+    let text = "";
+    let today = new Date();
+    let yyyy = today.getFullYear();
+    let mm = String(today.getMonth()+1).padStart(2,"0");
+    let dd = String(today.getDate()).padStart(2,"0");
+    let dateStr = yyyy + "-" + mm + "-" + dd;
+
+    let clientEUR = lastClientEUR;
+    let clientUSD = null;
+
+    if(showUSD){
+        if(!rate || rate <= 0){
+            alert("Įvesk EUR → USD kursą, jei nori rodyti kainą USD.");
+            return;
+        }
+        clientUSD = clientEUR * rate;
+    }
+
+    if(lang === "LT"){
+        text += "Insurance policy price:\n";
+        if(showEUR){
+            text += clientEUR.toLocaleString("lt-LT",{minimumFractionDigits:2, maximumFractionDigits:2}) + " EUR\n";
+        }
+        if(showUSD && clientUSD !== null){
+            text += clientUSD.toLocaleString("en-US",{minimumFractionDigits:2, maximumFractionDigits:2}) + " USD\n";
+        }
+
+        text += "\n";
+        if(showInvoice && invoiceAmount){
+            text += "Invoice value:\n";
+            text += invoiceAmount + " " + invoiceCurrency + "\n\n";
+        }
+        if(showDate){
+            text += "Date: " + dateStr + "\n";
+        }
+
+    } else {
+        text += "Insurance policy price:\n";
+        if(showEUR){
+            text += clientEUR.toLocaleString("en-US",{minimumFractionDigits:2, maximumFractionDigits:2}) + " EUR\n";
+        }
+        if(showUSD && clientUSD !== null){
+            text += clientUSD.toLocaleString("en-US",{minimumFractionDigits:2, maximumFractionDigits:2}) + " USD\n";
+        }
+
+        text += "\n";
+        if(showInvoice && invoiceAmount){
+            text += "Invoice value:\n";
+            text += invoiceAmount + " " + invoiceCurrency + "\n\n";
+        }
+        if(showDate){
+            text += "Date: " + dateStr + "\n";
+        }
+    }
+
+    document.getElementById("clientText").value = text.trim();
+    saveState();
+}
+
+function copyClientText(){
+    const ta = document.getElementById("clientText");
+    ta.select();
+    ta.setSelectionRange(0, 99999);
+    try{
+        const ok = document.execCommand("copy");
+        if(ok){
+            alert("Tekstas nukopijuotas.");
+        } else {
+            alert("Nepavyko automatiškai – paspausk CTRL+C.");
+        }
+    }catch(e){
+        alert("Paspausk CTRL+C, kad nukopijuotum tekstą.");
+    }
+}
+
+// PDF
+function generatePDF(){
+    const mode = document.getElementById("pdfMode").value;
+    document.body.classList.remove("pdf-calcs","pdf-client","pdf-both");
+    if(mode === "calc") document.body.classList.add("pdf-calcs");
+    else if(mode === "client") document.body.classList.add("pdf-client");
+    else document.body.classList.add("pdf-both");
+
+    window.print();
+
+    setTimeout(()=>{
+        document.body.classList.remove("pdf-calcs","pdf-client","pdf-both");
+    }, 500);
+}
+
+// AUTOSAVE
+function saveState(){
+    const state = {
+        invoiceCurrency: document.getElementById("invoiceCurrency").value,
+        invoiceAmount: document.getElementById("invoiceAmount").value,
+        invoiceEUR: document.getElementById("invoiceEUR").value,
+        brokerPercent: document.getElementById("brokerPercent").value,
+        brokerCustom: document.getElementById("brokerCustom").value,
+        myPercent: document.getElementById("myPercent").value,
+        myCustom: document.getElementById("myCustom").value,
+        lang: document.getElementById("lang").value,
+        showEUR: document.getElementById("showEUR").checked,
+        showUSD: document.getElementById("showUSD").checked,
+        showDate: document.getElementById("showDate").checked,
+        showInvoice: document.getElementById("showInvoice").checked,
+        rateEurUsd: document.getElementById("rateEurUsd").value,
+        clientText: document.getElementById("clientText").value
+    };
+    localStorage.setItem("don_super_state", JSON.stringify(state));
+}
+
+function loadState(){
+    const s = localStorage.getItem("don_super_state");
+    if(!s) return;
+    try{
+        const state = JSON.parse(s);
+        if(state.invoiceCurrency) document.getElementById("invoiceCurrency").value = state.invoiceCurrency;
+        if(state.invoiceAmount) document.getElementById("invoiceAmount").value = state.invoiceAmount;
+        if(state.invoiceEUR) document.getElementById("invoiceEUR").value = state.invoiceEUR;
+        if(state.brokerPercent) document.getElementById("brokerPercent").value = state.brokerPercent;
+        if(state.brokerPercent === "custom"){
+            document.getElementById("brokerCustom").disabled = false;
+        }
+        if(state.brokerCustom) document.getElementById("brokerCustom").value = state.brokerCustom;
+        if(state.myPercent) document.getElementById("myPercent").value = state.myPercent;
+        if(state.myPercent === "custom"){
+            document.getElementById("myCustom").disabled = false;
+        }
+        if(state.myCustom) document.getElementById("myCustom").value = state.myCustom;
+        if(state.lang) document.getElementById("lang").value = state.lang;
+        if(typeof state.showEUR === "boolean") document.getElementById("showEUR").checked = state.showEUR;
+        if(typeof state.showUSD === "boolean") document.getElementById("showUSD").checked = state.showUSD;
+        if(typeof state.showDate === "boolean") document.getElementById("showDate").checked = state.showDate;
+        if(typeof state.showInvoice === "boolean") document.getElementById("showInvoice").checked = state.showInvoice;
+        if(state.rateEurUsd) document.getElementById("rateEurUsd").value = state.rateEurUsd;
+        if(state.clientText) document.getElementById("clientText").value = state.clientText;
+    } catch(e){
+        console.log("Cannot parse saved state", e);
+    }
+}
+
+applyDarkFromStorage();
+loadState();
+</script>
+
+<div class="signature">© Donatas</div>
+</body>
+</html>
