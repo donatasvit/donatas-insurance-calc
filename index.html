@@ -271,13 +271,25 @@ button.action:hover{ background:#1d4ed8; }
 
         <div class="checkbox-clean">
             <label><input type="checkbox" id="showEUR" checked> Rodyti kainą EUR</label>
-            <label><input type="checkbox" id="showUSD" checked> Rodyti kainą USD</label>
+            <label><input type="checkbox" id="showUSD" checked> Rodyti papildomą valiutą</label>
             <label><input type="checkbox" id="showDate" checked> Rodyti datą</label>
             <label><input type="checkbox" id="showInvoice" checked> Rodyti invoice eilutę</label>
         </div>
 
-        <label>Kursas EUR → USD</label>
-        <input type="number" id="rateEurUsd" step="0.0001" placeholder="pvz. 1.1550">
+        <label>Pasirink papildomą valiutą</label>
+        <select id="clientCurrency">
+            <option value="">Nerodyti papildomos valiutos</option>
+            <option value="USD">USD</option>
+            <option value="GBP">GBP</option>
+            <option value="PLN">PLN</option>
+            <option value="CHF">CHF</option>
+            <option value="CNY">CNY</option>
+            <option value="CAD">CAD</option>
+            <option value="AUD">AUD</option>
+            <option value="NOK">NOK</option>
+            <option value="SEK">SEK</option>
+            <option value="JPY">JPY</option>
+        </select>
 
         <button class="action" onclick="generateClientText()">Generuoti tekstą klientui</button>
 
@@ -308,7 +320,7 @@ function toggleDark(){
 }
 if(localStorage.getItem("dark")==="true") document.body.classList.add("dark");
 
-/* Auto conversion ECB */
+/* Auto conversion ECB – invoice valiuta -> EUR */
 async function autoConvert(){
     const cur=document.getElementById("invoiceCurrency").value;
     const amt=parseFloat(document.getElementById("invoiceAmount").value);
@@ -381,25 +393,39 @@ function calc(){
     document.getElementById("resLeg").textContent=(eur*0.001).toFixed(2)+" EUR";
 }
 
-/* Profesionalus LT/EN/RU tekstas */
-function generateClientText() {
+/* Profesionalus LT/EN/RU tekstas su automatine papildoma valiuta */
+async function generateClientText() {
     if (!lastClientEUR) {
         alert("Pirmiausia apskaičiuok kainą");
         return;
     }
 
     const eur = lastClientEUR;
-    const rate = parseFloat(document.getElementById("rateEurUsd").value);
     const showEUR = document.getElementById("showEUR").checked;
-    const showUSD = document.getElementById("showUSD").checked;
+    const showExtra = document.getElementById("showUSD").checked; // tas pats checkbox, tik tekstas kitas
     const showDate = document.getElementById("showDate").checked;
     const showInvoice = document.getElementById("showInvoice").checked;
 
     const amt = document.getElementById("invoiceAmount").value;
     const cur = document.getElementById("invoiceCurrency").value;
     const lang = document.getElementById("lang").value;
+    const clientCur = document.getElementById("clientCurrency").value;
 
     const today = new Date().toISOString().split("T")[0];
+
+    let extraAmount = null;
+
+    if (showExtra && clientCur) {
+        try {
+            const resp = await fetch("https://api.frankfurter.app/latest?from=EUR&to=" + clientCur);
+            const data = await resp.json();
+            if (data && data.rates && data.rates[clientCur]) {
+                extraAmount = eur * data.rates[clientCur];
+            }
+        } catch (e) {
+            alert("Nepavyko automatiškai gauti valiutos kurso. Rodysime tik EUR.");
+        }
+    }
 
     let out = "";
 
@@ -408,40 +434,29 @@ function generateClientText() {
         out += "Siunčiame preliminarią draudimo įmokos kainą pagal pateiktą invoice vertę.\n\n";
 
         if (showEUR) out += `• Draudimo kaina: ${eur.toFixed(2)} EUR\n`;
-        if (showUSD) {
-            if (!rate) { alert("Įvesk kursą"); return; }
-            out += `• USD suma pagal šiandienos kursą: ${(eur * rate).toFixed(2)} USD\n`;
-        }
+        if (extraAmount !== null) out += `• Suma ${clientCur} pagal šiandienos kursą: ${extraAmount.toFixed(2)} ${clientCur}\n`;
         if (showInvoice && amt) out += `• Invoice vertė: ${amt} ${cur}\n`;
         if (showDate) out += `• Data: ${today}\n`;
 
-        out += "\nPastaba:\nTai orientacinė įmoka, paskaičiuota pagal invoice vertę ir šiandienos valiutos kursą.\nGalutinė kaina gali skirtis priklausomai nuo poliso išrašymo datos.\n";
+        out += "\nPastaba:\nTai orientacinė įmoka, paskaičiuota pagal invoice vertę ir šiandienos valiutos kursą.\nGalutinė kaina gali skirtis priklausomai nuo poliso išrašymo dienos.\n";
     }
-
     /* ===== EN ===== */
-    if (lang === "EN") {
+    else if (lang === "EN") {
         out += "Please find below the preliminary insurance premium calculated based on the provided invoice value.\n\n";
 
         if (showEUR) out += `• Insurance price: ${eur.toFixed(2)} EUR\n`;
-        if (showUSD) {
-            if (!rate) { alert("Enter FX rate"); return; }
-            out += `• USD amount at today’s rate: ${(eur * rate).toFixed(2)} USD\n`;
-        }
+        if (extraAmount !== null) out += `• Amount in ${clientCur} at today’s rate: ${extraAmount.toFixed(2)} ${clientCur}\n`;
         if (showInvoice && amt) out += `• Invoice value: ${amt} ${cur}\n`;
         if (showDate) out += `• Date: ${today}\n`;
 
         out += "\nNote:\nThis is an indicative premium based on the invoice value and current exchange rate.\nThe final amount may vary depending on the policy issuance date.\n";
     }
-
     /* ===== RU ===== */
-    if (lang === "RU") {
+    else if (lang === "RU") {
         out += "Ниже указана предварительная стоимость страховой премии, рассчитанная на основе суммы инвойса.\n\n";
 
         if (showEUR) out += `• Стоимость страховки: ${eur.toFixed(2)} EUR\n`;
-        if (showUSD) {
-            if (!rate) { alert("Введите курс"); return; }
-            out += `• Сумма в USD по текущему курсу: ${(eur * rate).toFixed(2)} USD\n`;
-        }
+        if (extraAmount !== null) out += `• Сумма в ${clientCur} по текущему курсу: ${extraAmount.toFixed(2)} ${clientCur}\n`;
         if (showInvoice && amt) out += `• Сумма инвойса: ${amt} ${cur}\n`;
         if (showDate) out += `• Дата: ${today}\n`;
 
