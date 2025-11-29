@@ -130,10 +130,6 @@ button.action:hover{ background:#1d4ed8; }
     margin-top:6px;
     font-size:12px;
 }
-.checkbox-row label{
-    margin-top:0;
-    font-weight:400;
-}
 
 .pdf-controls{
     margin-top:12px;
@@ -285,14 +281,17 @@ button.action:hover{ background:#1d4ed8; }
 </div>
 
 <script>
+
 let lastClientEUR = null;
 
+/* Dark mode */
 function toggleDark(){
     document.body.classList.toggle("dark");
     localStorage.setItem("dark", document.body.classList.contains("dark"));
 }
 if(localStorage.getItem("dark")==="true") document.body.classList.add("dark");
 
+/* Auto conversion ECB */
 async function autoConvert(){
     const cur=document.getElementById("invoiceCurrency").value;
     const amt=parseFloat(document.getElementById("invoiceAmount").value);
@@ -310,24 +309,29 @@ async function autoConvert(){
 document.getElementById("invoiceCurrency").addEventListener("change", autoConvert);
 document.getElementById("invoiceAmount").addEventListener("input", autoConvert);
 
-document.getElementById("brokerPercent").addEventListener("change",()=>{
+/* FIXED — rankinio įvedimo aktyvavimas */
+document.getElementById("brokerPercent").addEventListener("change", function () {
     const c=document.getElementById("brokerCustom");
-    c.disabled=this.value!=="custom";
-});
-document.getElementById("myPercent").addEventListener("change",()=>{
-    const c=document.getElementById("myCustom");
-    c.disabled=this.value!=="custom";
+    if(this.value==="custom"){ c.disabled=false; }
+    else{ c.disabled=true; c.value=""; }
 });
 
+document.getElementById("myPercent").addEventListener("change", function () {
+    const c=document.getElementById("myCustom");
+    if(this.value==="custom"){ c.disabled=false; }
+    else{ c.disabled=true; c.value=""; }
+});
+
+/* Main calculation */
 function calc(){
     const eur=parseFloat(document.getElementById("invoiceEUR").value);
     if(!eur){ alert("Blogi duomenys"); return; }
 
     let b=document.getElementById("brokerPercent").value;
-    b = b==="custom" ? parseFloat(document.getElementById("brokerCustom").value)/100 : b/100;
+    b = (b==="custom") ? parseFloat(document.getElementById("brokerCustom").value)/100 : b/100;
 
     let m=document.getElementById("myPercent").value;
-    m = m==="custom" ? parseFloat(document.getElementById("myCustom").value)/100 : m/100;
+    m = (m==="custom") ? parseFloat(document.getElementById("myCustom").value)/100 : m/100;
 
     const cost=eur*b;
     const client=eur*m;
@@ -346,9 +350,11 @@ function calc(){
     document.getElementById("resLeg").textContent=(eur*0.001).toFixed(2)+" EUR";
 }
 
+/* Client text */
 function generateClientText(){
     const eur=lastClientEUR;
     const rate=parseFloat(document.getElementById("rateEurUsd").value);
+
     let txt="Insurance policy price:\n";
 
     if(document.getElementById("showEUR").checked){
@@ -366,12 +372,14 @@ function copyClientText(){
     document.execCommand("copy");
 }
 
+/* PDF */
 function generatePDF(){
     const m=document.getElementById("pdfMode").value;
     document.body.classList.remove("pdf-calcs","pdf-client","pdf-both");
     document.body.classList.add("pdf-"+m);
     window.print();
 }
+
 </script>
 
 <div class="signature">© Donatas</div>
