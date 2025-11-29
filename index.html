@@ -309,6 +309,27 @@ button.action:hover{
 <script>
 let lastClientEUR = null;
 
+// atrakinam / užrakinam custom laukelius pagal pasirinkimą
+document.getElementById("brokerPercent").addEventListener("change", function () {
+    const custom = document.getElementById("brokerCustom");
+    if (this.value === "custom") {
+        custom.disabled = false;
+    } else {
+        custom.disabled = true;
+        custom.value = "";
+    }
+});
+
+document.getElementById("myPercent").addEventListener("change", function () {
+    const custom = document.getElementById("myCustom");
+    if (this.value === "custom") {
+        custom.disabled = false;
+    } else {
+        custom.disabled = true;
+        custom.value = "";
+    }
+});
+
 // DARK MODE
 function applyDarkFromStorage(){
     const d = localStorage.getItem("don_darkmode");
@@ -423,7 +444,7 @@ function calc(){
     saveState();
 }
 
-// CLIENT TEXT – PATAISYTA VERSIJA (be string klaidos)
+// CLIENT TEXT
 function generateClientText(){
     const lang = document.getElementById("lang").value;
     const showEUR = document.getElementById("showEUR").checked;
