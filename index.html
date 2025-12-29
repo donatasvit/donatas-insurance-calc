@@ -176,9 +176,60 @@ button.clear-btn:hover{
     background:#1d4ed8;
 }
 
+/* ===== About / README sekcija ===== */
+.about-wrap{
+    max-width:1200px;
+    margin:12px auto 0;
+    padding:0 16px;
+    text-align:right;
+}
+.about-toggle{
+    padding:6px 14px;
+    border:none;
+    border-radius:999px;
+    background:#1e293b;
+    color:#e5e7eb;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+}
+.about-toggle:hover{
+    background:#0f172a;
+}
+
+.about{
+    max-width:1200px;
+    margin:10px auto 0;
+    padding:16px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.12);
+    display:none;
+    font-size:13px;
+    line-height:1.55;
+}
+.about h2{
+    margin:0 0 8px 0;
+    font-size:18px;
+}
+.about h3{
+    margin:14px 0 6px 0;
+    font-size:15px;
+}
+.about ul{
+    margin:6px 0 0 0;
+    padding-left:18px;
+}
+.about hr{
+    border:none;
+    border-top:1px solid var(--border);
+    margin:14px 0;
+}
+
 @media print{
     body{ background:#ffffff; color:#000000; }
-    header, .pdf-controls{ display:none !important; }
+    header, .pdf-controls, .about-wrap, #aboutBox{ display:none !important; }
     .card{ box-shadow:none; border:1px solid #e5e7eb; }
     body.pdf-calcs #clientCard{ display:none !important; }
     body.pdf-client #calcCard{ display:none !important; }
@@ -200,8 +251,173 @@ button.clear-btn:hover{
 <header>
     <h1>Insurance Calculator (Auto Currency)</h1>
     <div class="spacer"></div>
+    <button onclick="toggleAbout()" title="Apie projektą">ℹ️</button>
     <button onclick="toggleDark()">🌙 / ☀️</button>
 </header>
+
+<!-- About / README mygtukas (papildomai, be header ikonėlės) -->
+<div class="about-wrap">
+    <button class="about-toggle" onclick="toggleAbout()">ℹ️ Apie projektą / README</button>
+</div>
+
+<!-- About / README turinys -->
+<div class="about" id="aboutBox">
+    <h2>Insurance Calculator (Auto Currency)</h2>
+
+    <p><strong>Autorius / Author:</strong> Donatas Vitenas<br>
+    <strong>Statusas / Status:</strong> Veikiantis prototipas (ribotos apimties) / Working prototype (limited scope)<br>
+    <strong>Veikimo principas / Execution model:</strong> vietinis (naršyklėje) / client-side (browser-based), su realiu valiutų kursų šaltiniu / using real currency rates</p>
+
+    <hr>
+
+    <h3>🇱🇹 LIETUVIŲ KALBA</h3>
+
+    <h3>Apie projektą</h3>
+    <p>
+        Šis projektas yra <strong>asmeninis, pilnai veikiantis draudimo kainų skaičiavimo sprendimas</strong>,
+        skirtas situacijoms, kai invoice pateikiamas užsienio valiuta, o galutinė kaina turi būti apskaičiuota ir pateikta <strong>EUR</strong>.
+    </p>
+    <p>
+        Tai <strong>ne teorinis pavyzdys ir ne „mock“ aplikacija</strong>.
+        Skaičiavimai atliekami <strong>realiu laiku</strong>, naudojant <strong>oficialius valiutų kursus</strong>,
+        todėl sprendimas gali būti naudojamas <strong>praktiniame darbe</strong>.
+    </p>
+    <p>
+        Projektas sukurtas kaip <strong>nedidelės apimties, savarankiškai veikiantis įrankis</strong>,
+        tinkamas realiam naudojimui be papildomos infrastruktūros.
+    </p>
+
+    <h3>Kam šis sprendimas reikalingas</h3>
+    <p>Praktikoje dažnai pasitaiko situacijos, kai:</p>
+    <ul>
+        <li>invoice pateikiamas USD, GBP ar kita valiuta,</li>
+        <li>draudimo pasiūlymas turi būti pateiktas EUR,</li>
+        <li>valiutų kursai nuolat kinta,</li>
+        <li>rankinis perskaičiavimas didina klaidų ir neatitikimų riziką.</li>
+    </ul>
+    <p>Šis įrankis leidžia:</p>
+    <ul>
+        <li><strong>automatiškai konvertuoti invoice sumą į EUR</strong>,</li>
+        <li>naudoti <strong>vieną patikimą ir oficialų valiutų kursų šaltinį</strong>,</li>
+        <li>sumažinti rankinį darbą ir žmogiškų klaidų tikimybę,</li>
+        <li>turėti aiškų, pakartojamą ir skaidrų skaičiavimo procesą.</li>
+    </ul>
+
+    <h3>Kaip veikia valiutų konvertavimas</h3>
+    <p>
+        Valiutų kursai gaunami iš <strong>Frankfurter API</strong>, kuris naudoja
+        <strong>Europos Centrinio Banko (ECB)</strong> oficialius duomenis.
+    </p>
+    <ul>
+        <li>naudojami <strong>realūs, bankinėje praktikoje taikomi kursai</strong>,</li>
+        <li>duomenys nėra imituojami ar generuojami dirbtinai,</li>
+        <li>nereikia API rakto ar autentifikacijos,</li>
+        <li>sprendimas veikia <strong>tiesiog naršyklėje (client-side)</strong>.</li>
+    </ul>
+
+    <h3>Ką daro ši skaičiuoklė</h3>
+    <ul>
+        <li>Automatiškai konvertuoja invoice sumą į EUR,</li>
+        <li>Apskaičiuoja brokerio savikainą, kainą klientui ir pelną,</li>
+        <li>Leidžia pasirinkti skirtingus procentinius scenarijus,</li>
+        <li>Palygina skirtingus skaičiavimo variantus,</li>
+        <li>Sugeneruoja <strong>paruoštą tekstą klientui</strong> (LT / EN / RU),</li>
+        <li>Visi skaičiavimai atliekami <strong>realiu laiku naršyklėje</strong>.</li>
+    </ul>
+
+    <h3>Kodėl projektas turi „ribotos apimties“ statusą</h3>
+    <p>Nors sprendimas yra <strong>funkcionalus ir praktiškai naudojamas</strong>, jis turi sąmoningai nustatytas ribas:</p>
+    <ul>
+        <li>nėra serverio ar duomenų bazės,</li>
+        <li>nėra naudotojų valdymo,</li>
+        <li>nėra SLA ar ilgalaikio palaikymo,</li>
+        <li>nėra integracijos su vidinėmis įmonių sistemomis.</li>
+    </ul>
+    <p>
+        Tai <strong>nėra funkcionalumo trūkumas</strong>, o sąmoningas sprendimas išlaikyti paprastumą ir patikimumą.
+    </p>
+
+    <h3>Pastaba</h3>
+    <p>
+        Šis projektas yra <strong>nekomercinis</strong>, tačiau <strong>funkcionaliai veikiantis</strong>.
+        Jis naudoja viešai prieinamus, oficialius valiutų kursų duomenis ir gali būti naudojamas praktinėse situacijose be papildomos infrastruktūros.
+    </p>
+
+    <hr>
+
+    <h3>🇬🇧 ENGLISH VERSION</h3>
+
+    <h3>About the project</h3>
+    <p>
+        This project is a <strong>personal, fully functional insurance price calculation solution</strong>,
+        designed for cases where an invoice is issued in a foreign currency and the final price must be calculated and presented in <strong>EUR</strong>.
+    </p>
+    <p>
+        This is <strong>not a theoretical example or a mock application</strong>.
+        All calculations are performed <strong>in real time</strong>, using <strong>official currency exchange rates</strong>, making the tool suitable for <strong>practical use</strong>.
+    </p>
+    <p>
+        The project is implemented as a <strong>small, self-contained solution</strong> that works without additional infrastructure.
+    </p>
+
+    <h3>Why this solution is needed</h3>
+    <p>In real business scenarios, it is common that:</p>
+    <ul>
+        <li>invoices are issued in USD, GBP, or other currencies,</li>
+        <li>insurance offers must be presented in EUR,</li>
+        <li>exchange rates constantly change,</li>
+        <li>manual recalculation increases the risk of errors.</li>
+    </ul>
+    <p>This tool allows users to:</p>
+    <ul>
+        <li><strong>automatically convert invoice amounts to EUR</strong>,</li>
+        <li>rely on <strong>a single, official currency rate source</strong>,</li>
+        <li>reduce manual work and human error,</li>
+        <li>maintain a clear and repeatable calculation process.</li>
+    </ul>
+
+    <h3>How currency conversion works</h3>
+    <p>
+        Currency rates are retrieved from the <strong>Frankfurter API</strong>, which is based on
+        <strong>European Central Bank (ECB)</strong> official exchange rates.
+    </p>
+    <ul>
+        <li><strong>real, bank-grade exchange rates</strong> are used,</li>
+        <li>data is not simulated or artificially generated,</li>
+        <li>no API key or authentication is required,</li>
+        <li>the solution runs <strong>entirely in the browser (client-side)</strong>.</li>
+    </ul>
+
+    <h3>What the calculator does</h3>
+    <ul>
+        <li>Automatically converts invoice amounts to EUR,</li>
+        <li>Calculates broker cost, client price, and profit,</li>
+        <li>Allows selection of different percentage scenarios,</li>
+        <li>Compares calculation variants,</li>
+        <li>Generates <strong>ready-to-use client communication text</strong> (LT / EN / RU),</li>
+        <li>All calculations are performed <strong>in real time in the browser</strong>.</li>
+    </ul>
+
+    <h3>Why the project has a “limited scope” status</h3>
+    <p>Although the solution is <strong>fully functional and usable</strong>, it has intentionally defined limitations:</p>
+    <ul>
+        <li>no backend server or database,</li>
+        <li>no user management,</li>
+        <li>no SLA or long-term support commitments,</li>
+        <li>no integration with internal enterprise systems.</li>
+    </ul>
+    <p>
+        These limitations are <strong>deliberate design decisions</strong>, not technical shortcomings.
+    </p>
+
+    <h3>Disclaimer</h3>
+    <p>
+        This project is <strong>non-commercial</strong>, yet <strong>fully functional</strong>.
+        It uses publicly available, official currency exchange data and can be used in practical scenarios without additional infrastructure.
+    </p>
+
+    <p style="margin-top:10px;"><strong>© Donatas Vitenas</strong></p>
+</div>
 
 <div class="container">
 
@@ -342,6 +558,12 @@ function toggleDark(){
     localStorage.setItem("dark", document.body.classList.contains("dark"));
 }
 if(localStorage.getItem("dark")==="true") document.body.classList.add("dark");
+
+/* About / README toggle */
+function toggleAbout(){
+    const box=document.getElementById("aboutBox");
+    box.style.display = (box.style.display==="block") ? "none" : "block";
+}
 
 /* Auto conversion ECB – invoice valiuta -> EUR */
 async function autoConvert(){
