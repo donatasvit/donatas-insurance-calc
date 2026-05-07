@@ -404,7 +404,20 @@ async function getRate(from, to){
     if(from === to) return 1;
 
     try{
-        const res = await fetch(`https://api.frankfurter.app/latest?from=${from}&to=${to}`);
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 6000);
+
+        const res = await fetch(`https://api.frankfurter.app/latest?from=${from}&to=${to}`, {
+            signal: controller.signal
+        });
+
+        clearTimeout(timeout);
+
+        if(!res.ok){
+            console.error("API HTTP klaida:", res.status);
+            return null;
+        }
+
         const data = await res.json();
 
         if(data && data.rates && data.rates[to]){
@@ -534,13 +547,14 @@ async function generateClientText() {
     const today = new Date().toISOString().split("T")[0];
 
     let extraAmount = null;
+    let extraRateAvailable = false;
+
     if(showExtra){
         const rate = await getRate("EUR", extraCur);
-        if(!rate){
-            alert("Nepavyko gauti valiutos kurso");
-            return;
+        if(rate){
+            extraAmount = eur * rate;
+            extraRateAvailable = true;
         }
-        extraAmount = eur * rate;
     }
 
     let out = "";
@@ -548,7 +562,8 @@ async function generateClientText() {
     if (lang === "LT") {
         out += "Siunčiame preliminarią draudimo įmokos kainą pagal pateiktą invoice vertę.\n\n";
         if (showEUR) out += `• Draudimo kaina: ${eur.toFixed(2)} EUR\n`;
-        if (showExtra && extraAmount !== null) out += `• Suma ${extraCur} pagal šiandienos kursą: ${extraAmount.toFixed(2)} ${extraCur}\n`;
+        if (showExtra && extraRateAvailable) out += `• Suma ${extraCur} pagal šiandienos kursą: ${extraAmount.toFixed(2)} ${extraCur}\n`;
+        if (showExtra && !extraRateAvailable) out += `• Papildomos valiutos (${extraCur}) kursas šiuo metu negautas, todėl rodoma tik EUR kaina\n`;
         if (showInvoice && amt) out += `• Invoice vertė: ${amt} ${invCur}\n`;
         if (showDate) out += `• Data: ${today}\n`;
         out += "\nPastaba:\nTai orientacinė įmoka, paskaičiuota pagal invoice vertę ir šiandienos valiutos kursą.\nGalutinė kaina gali skirtis priklausomai nuo poliso išrašymo dienos.\n";
@@ -557,7 +572,8 @@ async function generateClientText() {
     if (lang === "EN") {
         out += "Please find below the preliminary insurance premium calculated based on the provided invoice value.\n\n";
         if (showEUR) out += `• Insurance price: ${eur.toFixed(2)} EUR\n`;
-        if (showExtra && extraAmount !== null) out += `• Amount in ${extraCur} at today’s rate: ${extraAmount.toFixed(2)} ${extraCur}\n`;
+        if (showExtra && extraRateAvailable) out += `• Amount in ${extraCur} at today’s rate: ${extraAmount.toFixed(2)} ${extraCur}\n`;
+        if (showExtra && !extraRateAvailable) out += `• Additional currency rate (${extraCur}) is currently unavailable, therefore only EUR price is shown\n`;
         if (showInvoice && amt) out += `• Invoice value: ${amt} ${invCur}\n`;
         if (showDate) out += `• Date: ${today}\n`;
         out += "\nNote:\nThis is an indicative premium based on the invoice value and current exchange rate.\nThe final amount may vary depending on the policy issuance date.\n";
@@ -566,7 +582,8 @@ async function generateClientText() {
     if (lang === "RU") {
         out += "Ниже указана предварительная стоимость страховой премии, рассчитанная на основе суммы инвойса.\n\n";
         if (showEUR) out += `• Стоимость страховки: ${eur.toFixed(2)} EUR\n`;
-        if (showExtra && extraAmount !== null) out += `• Сумма в ${extraCur} по текущему курсу: ${extraAmount.toFixed(2)} ${extraCur}\n`;
+        if (showExtra && extraRateAvailable) out += `• Сумма в ${extraCur} по текущему курсу: ${extraAmount.toFixed(2)} ${extraCur}\n`;
+        if (showExtra && !extraRateAvailable) out += `• Курс дополнительной валюты (${extraCur}) сейчас недоступен, поэтому указана только цена в EUR\n`;
         if (showInvoice && amt) out += `• Сумма инвойса: ${amt} ${invCur}\n`;
         if (showDate) out += `• Дата: ${today}\n`;
         out += "\nПримечание:\nЭто ориентировочная премия, рассчитанная по сумме инвойса и текущему курсу.\nФактическая стоимость может отличаться в зависимости от даты оформления полиса.\n";
