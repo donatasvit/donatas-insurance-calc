@@ -551,6 +551,9 @@ async function generateClientText() {
 
     if(showExtra){
         const rate = await getRate("EUR", extraCur);
+
+        // SVARBU: jei API neatsako, teksto generavimo nestabdom.
+        // EUR kaina vis tiek bus parodyta klientui.
         if(rate){
             extraAmount = eur * rate;
             extraRateAvailable = true;
