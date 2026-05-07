@@ -431,19 +431,24 @@ async function autoConvert(){
     }
 
     try{
-        const url = `https://api.frankfurter.app/latest?amount=${amt}&from=${cur}&to=EUR`;
-        const r = await fetch(url);
+        const r = await fetch(`https://api.frankfurter.app/latest?from=${cur}&to=EUR`);
         const d = await r.json();
 
         if(d && d.rates && d.rates.EUR){
-            const eur = Number(d.rates.EUR);
+            const rate = Number(d.rates.EUR);
+            const eur = amt * rate;
             out.value = eur.toFixed(2);
             return eur;
         }
 
-        console.log("Blogas API atsakymas:", d);
+        throw new Error("EUR kursas nerastas");
+
+    }catch(e){
+        console.error("VALIUTOS KLAIDA:", e);
         out.value = "";
         return null;
+    }
+}
 
     }catch(e){
         console.error("VALIUTOS KLAIDA:", e);
