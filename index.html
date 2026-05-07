@@ -237,15 +237,13 @@ button.clear-btn:hover{
     <h3>LT</h3>
     <p>
         Šis įrankis automatiškai konvertuoja invoice sumą į EUR, apskaičiuoja brokerio savikainą,
-        kainą klientui ir pelną. Skirtas praktiniam draudimo kainos paskaičiavimui, kai invoice pateiktas
-        USD, GBP, PLN ar kita valiuta.
+        kainą klientui ir pelną.
     </p>
 
     <h3>EN</h3>
     <p>
         This tool automatically converts invoice value to EUR and calculates broker cost,
-        client price and profit. It is intended for practical insurance premium calculation when the invoice
-        is issued in USD, GBP, PLN or another currency.
+        client price and profit.
     </p>
 
     <p><strong>© Donatas Vitenas</strong></p>
@@ -349,6 +347,7 @@ button.clear-btn:hover{
 
         <label>Pasirink papildomą valiutą</label>
         <select id="extraCurrency">
+            <option value="EUR">EUR</option>
             <option value="USD">USD</option>
             <option value="GBP">GBP</option>
             <option value="PLN">PLN</option>
@@ -550,13 +549,15 @@ async function generateClientText() {
     let extraRateAvailable = false;
 
     if(showExtra){
-        const rate = await getRate("EUR", extraCur);
+        try{
+            const rate = await getRate("EUR", extraCur);
 
-        // SVARBU: jei API neatsako, teksto generavimo nestabdom.
-        // EUR kaina vis tiek bus parodyta klientui.
-        if(rate){
-            extraAmount = eur * rate;
-            extraRateAvailable = true;
+            if(rate && !isNaN(rate)){
+                extraAmount = eur * rate;
+                extraRateAvailable = true;
+            }
+        }catch(e){
+            console.error("Papildomos valiutos klaida:", e);
         }
     }
 
@@ -637,7 +638,7 @@ function resetAll(){
     document.getElementById("showExtra").checked = true;
     document.getElementById("showDate").checked = true;
     document.getElementById("showInvoice").checked = true;
-    document.getElementById("extraCurrency").value = "USD";
+    document.getElementById("extraCurrency").value = "EUR";
     document.getElementById("clientText").value = "";
     document.getElementById("pdfMode").value = "both";
 
