@@ -446,7 +446,7 @@ async function autoConvert(){
         return null;
 
     }catch(e){
-        console.log("Valiutos konvertavimo klaida:", e);
+        console.error("VALIUTOS KLAIDA:", e);
         out.value = "";
         return null;
     }
