@@ -123,7 +123,6 @@ button.action:hover{ background:#1d4ed8; }
 .green{ color:#22c55e; }
 .red{ color:#ef4444; }
 
-/* Aiškūs checkbox'ai */
 .checkbox-clean {
     display:flex;
     flex-direction:column;
@@ -157,7 +156,6 @@ button.action:hover{ background:#1d4ed8; }
     min-width:140px;
 }
 
-/* Naujas mėlynas "Naujas skaičiavimas" mygtukas */
 .clear-row{
     margin-top:8px;
     text-align:right;
@@ -176,7 +174,6 @@ button.clear-btn:hover{
     background:#1d4ed8;
 }
 
-/* ===== About / README sekcija ===== */
 .about-wrap{
     max-width:1200px;
     margin:12px auto 0;
@@ -209,29 +206,16 @@ button.clear-btn:hover{
     font-size:13px;
     line-height:1.55;
 }
-.about h2{
-    margin:0 0 8px 0;
-    font-size:18px;
-}
-.about h3{
-    margin:14px 0 6px 0;
-    font-size:15px;
-}
-.about ul{
-    margin:6px 0 0 0;
-    padding-left:18px;
-}
-.about hr{
-    border:none;
-    border-top:1px solid var(--border);
-    margin:14px 0;
-}
+.about h2{ margin:0 0 8px 0; font-size:18px; }
+.about h3{ margin:14px 0 6px 0; font-size:15px; }
+.about ul{ margin:6px 0 0 0; padding-left:18px; }
+.about hr{ border:none; border-top:1px solid var(--border); margin:14px 0; }
 
 @media print{
     body{ background:#ffffff; color:#000000; }
     header, .pdf-controls, .about-wrap, #aboutBox{ display:none !important; }
     .card{ box-shadow:none; border:1px solid #e5e7eb; }
-    body.pdf-calcs #clientCard{ display:none !important; }
+    body.pdf-calc #clientCard{ display:none !important; }
     body.pdf-client #calcCard{ display:none !important; }
     body.pdf-both #calcCard, body.pdf-both #clientCard{ display:block !important; }
 }
@@ -255,173 +239,38 @@ button.clear-btn:hover{
     <button onclick="toggleDark()">🌙 / ☀️</button>
 </header>
 
-<!-- About / README mygtukas (papildomai, be header ikonėlės) -->
 <div class="about-wrap">
     <button class="about-toggle" onclick="toggleAbout()">ℹ️ Apie projektą / README</button>
 </div>
 
-<!-- About / README turinys -->
 <div class="about" id="aboutBox">
     <h2>Insurance Calculator (Auto Currency)</h2>
 
     <p><strong>Autorius / Author:</strong> Donatas Vitenas<br>
-    <strong>Statusas / Status:</strong> Veikiantis prototipas (ribotos apimties) / Working prototype (limited scope)<br>
-    <strong>Veikimo principas / Execution model:</strong> vietinis (naršyklėje) / client-side (browser-based), su realiu valiutų kursų šaltiniu / using real currency rates</p>
+    <strong>Statusas / Status:</strong> Veikiantis prototipas / Working prototype<br>
+    <strong>Veikimo principas:</strong> naršyklėje, naudojant Frankfurter API / ECB valiutų kursus.</p>
 
     <hr>
 
-    <h3>🇱🇹 LIETUVIŲ KALBA</h3>
-
-    <h3>Apie projektą</h3>
+    <h3>LT</h3>
     <p>
-        Šis projektas yra <strong>asmeninis, pilnai veikiantis draudimo kainų skaičiavimo sprendimas</strong>,
-        skirtas situacijoms, kai invoice pateikiamas užsienio valiuta, o galutinė kaina turi būti apskaičiuota ir pateikta <strong>EUR</strong>.
-    </p>
-    <p>
-        Tai <strong>ne teorinis pavyzdys ir ne „mock“ aplikacija</strong>.
-        Skaičiavimai atliekami <strong>realiu laiku</strong>, naudojant <strong>oficialius valiutų kursus</strong>,
-        todėl sprendimas gali būti naudojamas <strong>praktiniame darbe</strong>.
-    </p>
-    <p>
-        Projektas sukurtas kaip <strong>nedidelės apimties, savarankiškai veikiantis įrankis</strong>,
-        tinkamas realiam naudojimui be papildomos infrastruktūros.
+        Šis įrankis automatiškai konvertuoja invoice sumą į EUR, apskaičiuoja brokerio savikainą,
+        kainą klientui ir pelną. Skirtas praktiniam draudimo kainos paskaičiavimui, kai invoice pateiktas
+        USD, GBP, PLN ar kita valiuta.
     </p>
 
-    <h3>Kam šis sprendimas reikalingas</h3>
-    <p>Praktikoje dažnai pasitaiko situacijos, kai:</p>
-    <ul>
-        <li>invoice pateikiamas USD, GBP ar kita valiuta,</li>
-        <li>draudimo pasiūlymas turi būti pateiktas EUR,</li>
-        <li>valiutų kursai nuolat kinta,</li>
-        <li>rankinis perskaičiavimas didina klaidų ir neatitikimų riziką.</li>
-    </ul>
-    <p>Šis įrankis leidžia:</p>
-    <ul>
-        <li><strong>automatiškai konvertuoti invoice sumą į EUR</strong>,</li>
-        <li>naudoti <strong>vieną patikimą ir oficialų valiutų kursų šaltinį</strong>,</li>
-        <li>sumažinti rankinį darbą ir žmogiškų klaidų tikimybę,</li>
-        <li>turėti aiškų, pakartojamą ir skaidrų skaičiavimo procesą.</li>
-    </ul>
-
-    <h3>Kaip veikia valiutų konvertavimas</h3>
+    <h3>EN</h3>
     <p>
-        Valiutų kursai gaunami iš <strong>Frankfurter API</strong>, kuris naudoja
-        <strong>Europos Centrinio Banko (ECB)</strong> oficialius duomenis.
-    </p>
-    <ul>
-        <li>naudojami <strong>realūs, bankinėje praktikoje taikomi kursai</strong>,</li>
-        <li>duomenys nėra imituojami ar generuojami dirbtinai,</li>
-        <li>nereikia API rakto ar autentifikacijos,</li>
-        <li>sprendimas veikia <strong>tiesiog naršyklėje (client-side)</strong>.</li>
-    </ul>
-
-    <h3>Ką daro ši skaičiuoklė</h3>
-    <ul>
-        <li>Automatiškai konvertuoja invoice sumą į EUR,</li>
-        <li>Apskaičiuoja brokerio savikainą, kainą klientui ir pelną,</li>
-        <li>Leidžia pasirinkti skirtingus procentinius scenarijus,</li>
-        <li>Palygina skirtingus skaičiavimo variantus,</li>
-        <li>Sugeneruoja <strong>paruoštą tekstą klientui</strong> (LT / EN / RU),</li>
-        <li>Visi skaičiavimai atliekami <strong>realiu laiku naršyklėje</strong>.</li>
-    </ul>
-
-    <h3>Kodėl projektas turi „ribotos apimties“ statusą</h3>
-    <p>Nors sprendimas yra <strong>funkcionalus ir praktiškai naudojamas</strong>, jis turi sąmoningai nustatytas ribas:</p>
-    <ul>
-        <li>nėra serverio ar duomenų bazės,</li>
-        <li>nėra naudotojų valdymo,</li>
-        <li>nėra SLA ar ilgalaikio palaikymo,</li>
-        <li>nėra integracijos su vidinėmis įmonių sistemomis.</li>
-    </ul>
-    <p>
-        Tai <strong>nėra funkcionalumo trūkumas</strong>, o sąmoningas sprendimas išlaikyti paprastumą ir patikimumą.
+        This tool automatically converts invoice value to EUR and calculates broker cost,
+        client price and profit. It is intended for practical insurance premium calculation when the invoice
+        is issued in USD, GBP, PLN or another currency.
     </p>
 
-    <h3>Pastaba</h3>
-    <p>
-        Šis projektas yra <strong>nekomercinis</strong>, tačiau <strong>funkcionaliai veikiantis</strong>.
-        Jis naudoja viešai prieinamus, oficialius valiutų kursų duomenis ir gali būti naudojamas praktinėse situacijose be papildomos infrastruktūros.
-    </p>
-
-    <hr>
-
-    <h3>🇬🇧 ENGLISH VERSION</h3>
-
-    <h3>About the project</h3>
-    <p>
-        This project is a <strong>personal, fully functional insurance price calculation solution</strong>,
-        designed for cases where an invoice is issued in a foreign currency and the final price must be calculated and presented in <strong>EUR</strong>.
-    </p>
-    <p>
-        This is <strong>not a theoretical example or a mock application</strong>.
-        All calculations are performed <strong>in real time</strong>, using <strong>official currency exchange rates</strong>, making the tool suitable for <strong>practical use</strong>.
-    </p>
-    <p>
-        The project is implemented as a <strong>small, self-contained solution</strong> that works without additional infrastructure.
-    </p>
-
-    <h3>Why this solution is needed</h3>
-    <p>In real business scenarios, it is common that:</p>
-    <ul>
-        <li>invoices are issued in USD, GBP, or other currencies,</li>
-        <li>insurance offers must be presented in EUR,</li>
-        <li>exchange rates constantly change,</li>
-        <li>manual recalculation increases the risk of errors.</li>
-    </ul>
-    <p>This tool allows users to:</p>
-    <ul>
-        <li><strong>automatically convert invoice amounts to EUR</strong>,</li>
-        <li>rely on <strong>a single, official currency rate source</strong>,</li>
-        <li>reduce manual work and human error,</li>
-        <li>maintain a clear and repeatable calculation process.</li>
-    </ul>
-
-    <h3>How currency conversion works</h3>
-    <p>
-        Currency rates are retrieved from the <strong>Frankfurter API</strong>, which is based on
-        <strong>European Central Bank (ECB)</strong> official exchange rates.
-    </p>
-    <ul>
-        <li><strong>real, bank-grade exchange rates</strong> are used,</li>
-        <li>data is not simulated or artificially generated,</li>
-        <li>no API key or authentication is required,</li>
-        <li>the solution runs <strong>entirely in the browser (client-side)</strong>.</li>
-    </ul>
-
-    <h3>What the calculator does</h3>
-    <ul>
-        <li>Automatically converts invoice amounts to EUR,</li>
-        <li>Calculates broker cost, client price, and profit,</li>
-        <li>Allows selection of different percentage scenarios,</li>
-        <li>Compares calculation variants,</li>
-        <li>Generates <strong>ready-to-use client communication text</strong> (LT / EN / RU),</li>
-        <li>All calculations are performed <strong>in real time in the browser</strong>.</li>
-    </ul>
-
-    <h3>Why the project has a “limited scope” status</h3>
-    <p>Although the solution is <strong>fully functional and usable</strong>, it has intentionally defined limitations:</p>
-    <ul>
-        <li>no backend server or database,</li>
-        <li>no user management,</li>
-        <li>no SLA or long-term support commitments,</li>
-        <li>no integration with internal enterprise systems.</li>
-    </ul>
-    <p>
-        These limitations are <strong>deliberate design decisions</strong>, not technical shortcomings.
-    </p>
-
-    <h3>Disclaimer</h3>
-    <p>
-        This project is <strong>non-commercial</strong>, yet <strong>fully functional</strong>.
-        It uses publicly available, official currency exchange data and can be used in practical scenarios without additional infrastructure.
-    </p>
-
-    <p style="margin-top:10px;"><strong>© Donatas Vitenas</strong></p>
+    <p><strong>© Donatas Vitenas</strong></p>
 </div>
 
 <div class="container">
 
-    <!-- SKAIČIUOKLĖ -->
     <div class="card" id="calcCard">
         <h2>Skaičiuoklė</h2>
 
@@ -445,7 +294,6 @@ button.clear-btn:hover{
         <label>Invoice suma EUR (automatiškai per ECB)</label>
         <input type="number" id="invoiceEUR" readonly style="background:#e2e8f0;">
 
-        <!-- Naujas mygtukas -->
         <div class="clear-row">
             <button type="button" class="clear-btn" onclick="resetAll()">Naujas skaičiavimas</button>
         </div>
@@ -496,7 +344,6 @@ button.clear-btn:hover{
         <p>Legator 0,10 %: <span id="resLeg" class="value">–</span></p>
     </div>
 
-    <!-- KLIENTO TEKSTAS -->
     <div class="card" id="clientCard">
         <h2>Tekstas klientui</h2>
 
@@ -552,109 +399,141 @@ button.clear-btn:hover{
 <script>
 let lastClientEUR = null;
 
-/* Dark mode */
 function toggleDark(){
     document.body.classList.toggle("dark");
     localStorage.setItem("dark", document.body.classList.contains("dark"));
 }
 if(localStorage.getItem("dark")==="true") document.body.classList.add("dark");
 
-/* About / README toggle */
 function toggleAbout(){
-    const box=document.getElementById("aboutBox");
-    box.style.display = (box.style.display==="block") ? "none" : "block";
+    const box = document.getElementById("aboutBox");
+    box.style.display = (box.style.display === "block") ? "none" : "block";
 }
 
-/* Auto conversion ECB – invoice valiuta -> EUR */
-async function autoConvert(){
-    const cur=document.getElementById("invoiceCurrency").value;
-    const amt=parseFloat(document.getElementById("invoiceAmount").value);
-    const out=document.getElementById("invoiceEUR");
+function parseNumber(value){
+    if(value === null || value === undefined) return NaN;
+    return parseFloat(String(value).replace(",", "."));
+}
 
-    if(!amt){ out.value=""; return; }
-    if(cur==="EUR"){ out.value=amt.toFixed(2); return; }
+async function autoConvert(){
+    const cur = document.getElementById("invoiceCurrency").value;
+    const amt = parseNumber(document.getElementById("invoiceAmount").value);
+    const out = document.getElementById("invoiceEUR");
+
+    if(!amt || amt <= 0){
+        out.value = "";
+        return null;
+    }
+
+    if(cur === "EUR"){
+        out.value = amt.toFixed(2);
+        return amt;
+    }
 
     try{
-        const r=await fetch("https://api.frankfurter.app/latest?from="+cur+"&to=EUR");
-        const d=await r.json();
+        const url = `https://api.frankfurter.app/latest?amount=${amt}&from=${cur}&to=EUR`;
+        const r = await fetch(url);
+        const d = await r.json();
+
         if(d && d.rates && d.rates.EUR){
-            out.value=(amt*d.rates.EUR).toFixed(4);
-        }else{
-            out.value="";
+            const eur = Number(d.rates.EUR);
+            out.value = eur.toFixed(2);
+            return eur;
         }
+
+        console.log("Blogas API atsakymas:", d);
+        out.value = "";
+        return null;
+
     }catch(e){
-        out.value="";
+        console.log("Valiutos konvertavimo klaida:", e);
+        out.value = "";
+        return null;
     }
 }
+
 document.getElementById("invoiceCurrency").addEventListener("change", autoConvert);
 document.getElementById("invoiceAmount").addEventListener("input", autoConvert);
 
-/* Procentų aktyvavimas */
 document.getElementById("brokerPercent").addEventListener("change", function () {
-    const c=document.getElementById("brokerCustom");
+    const c = document.getElementById("brokerCustom");
     c.disabled = (this.value !== "custom");
-    if(c.disabled) c.value="";
+    if(c.disabled) c.value = "";
 });
+
 document.getElementById("myPercent").addEventListener("change", function () {
-    const c=document.getElementById("myCustom");
+    const c = document.getElementById("myCustom");
     c.disabled = (this.value !== "custom");
-    if(c.disabled) c.value="";
+    if(c.disabled) c.value = "";
 });
 
-/* Skaičiavimai – palaiko ir kablelį, ir tašką */
-function calc(){
-    const eur=parseFloat(document.getElementById("invoiceEUR").value);
-    if(!eur){ alert("Blogi duomenys"); return; }
+function getPercent(selectId, customId){
+    let v = document.getElementById(selectId).value;
 
-    let b=document.getElementById("brokerPercent").value;
-    if(b==="custom"){
-        b = document.getElementById("brokerCustom").value.replace(",", ".");
-        b = parseFloat(b)/100;
-    } else {
-        b = parseFloat(b)/100;
+    if(v === "custom"){
+        v = parseNumber(document.getElementById(customId).value);
+    }else{
+        v = parseNumber(v);
     }
 
-    let m=document.getElementById("myPercent").value;
-    if(m==="custom"){
-        m = document.getElementById("myCustom").value.replace(",", ".");
-        m = parseFloat(m)/100;
-    } else {
-        m = parseFloat(m)/100;
+    if(isNaN(v)) return NaN;
+
+    return v / 100;
+}
+
+async function calc(){
+    let eur = parseNumber(document.getElementById("invoiceEUR").value);
+
+    if(!eur || eur <= 0){
+        eur = await autoConvert();
     }
+
+    if(!eur || eur <= 0){
+        alert("Nepavyko konvertuoti valiutos į EUR");
+        return;
+    }
+
+    const b = getPercent("brokerPercent", "brokerCustom");
+    const m = getPercent("myPercent", "myCustom");
 
     if(isNaN(b) || isNaN(m)){
         alert("Įvesk procentą teisingu formatu: pvz. 0.30 arba 0,30");
         return;
     }
 
-    const cost=eur*b;
-    const client=eur*m;
-    lastClientEUR=client;
+    const cost = eur * b;
+    const client = eur * m;
+    const profit = client - cost;
 
-    document.getElementById("resInvoiceEUR").textContent=eur.toFixed(2)+" EUR";
-    document.getElementById("resCost").textContent=cost.toFixed(2)+" EUR";
-    document.getElementById("resClient").textContent=client.toFixed(2)+" EUR";
+    lastClientEUR = client;
 
-    const p=client-cost;
-    const pe=document.getElementById("resProfit");
-    pe.textContent=p.toFixed(2)+" EUR";
-    pe.className="value "+(p>=0?"green":"red");
+    document.getElementById("resInvoiceEUR").textContent = eur.toFixed(2) + " EUR";
+    document.getElementById("resCost").textContent = cost.toFixed(2) + " EUR";
+    document.getElementById("resClient").textContent = client.toFixed(2) + " EUR";
 
-    document.getElementById("resAON").textContent=(eur*0.0007).toFixed(2)+" EUR";
-    document.getElementById("resLeg").textContent=(eur*0.001).toFixed(2)+" EUR";
+    const pe = document.getElementById("resProfit");
+    pe.textContent = profit.toFixed(2) + " EUR";
+    pe.className = "value " + (profit >= 0 ? "green" : "red");
 
-    /* Auto-clear: po naujo skaičiavimo išvalom seną kliento tekstą */
-    document.getElementById("clientText").value="";
+    document.getElementById("resAON").textContent = (eur * 0.0007).toFixed(2) + " EUR";
+    document.getElementById("resLeg").textContent = (eur * 0.001).toFixed(2) + " EUR";
+
+    document.getElementById("clientText").value = "";
 }
 
-/* Pagalbinė funkcija valiutų kursui iš Frankfurter */
 async function getRate(from, to){
-    const res = await fetch("https://api.frankfurter.app/latest?from="+from+"&to="+to);
-    const data = await res.json();
-    return data && data.rates ? data.rates[to] : null;
+    if(from === to) return 1;
+
+    try{
+        const res = await fetch(`https://api.frankfurter.app/latest?from=${from}&to=${to}`);
+        const data = await res.json();
+        return data && data.rates ? data.rates[to] : null;
+    }catch(e){
+        console.log("Kurso gavimo klaida:", e);
+        return null;
+    }
 }
 
-/* Profesionalus LT/EN/RU tekstas su auto valiuta */
 async function generateClientText() {
     if (!lastClientEUR) {
         alert("Pirmiausia apskaičiuok kainą");
@@ -686,99 +565,83 @@ async function generateClientText() {
 
     let out = "";
 
-    /* ===== LT ===== */
     if (lang === "LT") {
         out += "Siunčiame preliminarią draudimo įmokos kainą pagal pateiktą invoice vertę.\n\n";
-
         if (showEUR) out += `• Draudimo kaina: ${eur.toFixed(2)} EUR\n`;
-        if (showExtra && extraAmount!==null) {
-            out += `• Suma ${extraCur} pagal šiandienos kursą: ${extraAmount.toFixed(2)} ${extraCur}\n`;
-        }
+        if (showExtra && extraAmount !== null) out += `• Suma ${extraCur} pagal šiandienos kursą: ${extraAmount.toFixed(2)} ${extraCur}\n`;
         if (showInvoice && amt) out += `• Invoice vertė: ${amt} ${invCur}\n`;
         if (showDate) out += `• Data: ${today}\n`;
-
         out += "\nPastaba:\nTai orientacinė įmoka, paskaičiuota pagal invoice vertę ir šiandienos valiutos kursą.\nGalutinė kaina gali skirtis priklausomai nuo poliso išrašymo dienos.\n";
     }
 
-    /* ===== EN ===== */
     if (lang === "EN") {
         out += "Please find below the preliminary insurance premium calculated based on the provided invoice value.\n\n";
-
         if (showEUR) out += `• Insurance price: ${eur.toFixed(2)} EUR\n`;
-        if (showExtra && extraAmount!==null) {
-            out += `• Amount in ${extraCur} at today’s rate: ${extraAmount.toFixed(2)} ${extraCur}\n`;
-        }
+        if (showExtra && extraAmount !== null) out += `• Amount in ${extraCur} at today’s rate: ${extraAmount.toFixed(2)} ${extraCur}\n`;
         if (showInvoice && amt) out += `• Invoice value: ${amt} ${invCur}\n`;
         if (showDate) out += `• Date: ${today}\n`;
-
         out += "\nNote:\nThis is an indicative premium based on the invoice value and current exchange rate.\nThe final amount may vary depending on the policy issuance date.\n";
     }
 
-    /* ===== RU ===== */
     if (lang === "RU") {
         out += "Ниже указана предварительная стоимость страховой премии, рассчитанная на основе суммы инвойса.\n\n";
-
         if (showEUR) out += `• Стоимость страховки: ${eur.toFixed(2)} EUR\n`;
-        if (showExtra && extraAmount!==null) {
-            out += `• Сумма в ${extraCur} по текущему курсу: ${extraAmount.toFixed(2)} ${extraCur}\n`;
-        }
+        if (showExtra && extraAmount !== null) out += `• Сумма в ${extraCur} по текущему курсу: ${extraAmount.toFixed(2)} ${extraCur}\n`;
         if (showInvoice && amt) out += `• Сумма инвойса: ${amt} ${invCur}\n`;
         if (showDate) out += `• Дата: ${today}\n`;
-
         out += "\nПримечание:\nЭто ориентировочная премия, рассчитанная по сумме инвойса и текущему курсу.\nФактическая стоимость может отличаться в зависимости от даты оформления полиса.\n";
     }
 
     document.getElementById("clientText").value = out;
 }
 
-/* Copy */
 function copyClientText(){
-    const t=document.getElementById("clientText");
+    const t = document.getElementById("clientText");
     t.select();
     document.execCommand("copy");
 }
 
-/* PDF */
 function generatePDF(){
-    const m=document.getElementById("pdfMode").value;
-    document.body.classList.remove("pdf-calcs","pdf-client","pdf-both");
-    document.body.classList.add("pdf-"+m);
+    const m = document.getElementById("pdfMode").value;
+    document.body.classList.remove("pdf-calc","pdf-client","pdf-both");
+    document.body.classList.add("pdf-" + m);
     window.print();
 }
 
-/* Naujas skaičiavimas – išvalom viską */
 function resetAll(){
-    document.getElementById("invoiceCurrency").value="USD";
-    document.getElementById("invoiceAmount").value="";
-    document.getElementById("invoiceEUR").value="";
+    document.getElementById("invoiceCurrency").value = "USD";
+    document.getElementById("invoiceAmount").value = "";
+    document.getElementById("invoiceEUR").value = "";
 
-    document.getElementById("brokerPercent").value="0.07";
-    document.getElementById("brokerCustom").value="";
-    document.getElementById("brokerCustom").disabled=true;
+    document.getElementById("brokerPercent").value = "0.07";
+    document.getElementById("brokerCustom").value = "";
+    document.getElementById("brokerCustom").disabled = true;
 
-    document.getElementById("myPercent").value="0.24";
-    document.getElementById("myCustom").value="";
-    document.getElementById("myCustom").disabled=true;
+    document.getElementById("myPercent").value = "0.24";
+    document.getElementById("myCustom").value = "";
+    document.getElementById("myCustom").disabled = true;
 
-    document.getElementById("resInvoiceEUR").textContent="–";
-    document.getElementById("resCost").textContent="–";
-    document.getElementById("resClient").textContent="–";
-    const pe=document.getElementById("resProfit");
-    pe.textContent="–";
-    pe.className="value";
-    document.getElementById("resAON").textContent="–";
-    document.getElementById("resLeg").textContent="–";
+    document.getElementById("resInvoiceEUR").textContent = "–";
+    document.getElementById("resCost").textContent = "–";
+    document.getElementById("resClient").textContent = "–";
 
-    document.getElementById("lang").value="LT";
-    document.getElementById("showEUR").checked=true;
-    document.getElementById("showExtra").checked=true;
-    document.getElementById("showDate").checked=true;
-    document.getElementById("showInvoice").checked=true;
-    document.getElementById("extraCurrency").value="USD";
-    document.getElementById("clientText").value="";
-    document.getElementById("pdfMode").value="both";
+    const pe = document.getElementById("resProfit");
+    pe.textContent = "–";
+    pe.className = "value";
 
-    lastClientEUR=null;
+    document.getElementById("resAON").textContent = "–";
+    document.getElementById("resLeg").textContent = "–";
+
+    document.getElementById("lang").value = "LT";
+    document.getElementById("showEUR").checked = true;
+    document.getElementById("showExtra").checked = true;
+    document.getElementById("showDate").checked = true;
+    document.getElementById("showInvoice").checked = true;
+    document.getElementById("extraCurrency").value = "USD";
+    document.getElementById("clientText").value = "";
+    document.getElementById("pdfMode").value = "both";
+
+    lastClientEUR = null;
 }
 </script>
 
