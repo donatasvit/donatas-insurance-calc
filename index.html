@@ -22,13 +22,16 @@ body.dark{
   --header-text:#f9fafb;
   --border:#475569;
 }
+
 *{box-sizing:border-box;}
+
 body{
     margin:0;
     font-family:Arial, sans-serif;
     background:var(--bg);
     color:var(--text);
 }
+
 header{
     background:var(--header);
     color:var(--header-text);
@@ -52,6 +55,7 @@ header button{
     cursor:pointer;
     font-size:13px;
 }
+
 .container{
     max-width:1200px;
     margin:0 auto;
@@ -60,6 +64,7 @@ header button{
     gap:16px;
     flex-wrap:wrap;
 }
+
 .card{
     background:var(--card);
     border-radius:12px;
@@ -69,6 +74,7 @@ header button{
     flex:1 1 360px;
     min-width:320px;
 }
+
 h2{
     margin:0 0 10px 0;
     font-size:18px;
@@ -79,6 +85,7 @@ label{
     font-weight:600;
     margin-top:8px;
 }
+
 input, select, textarea{
     width:100%;
     padding:8px;
@@ -88,11 +95,13 @@ input, select, textarea{
     color:var(--text);
     font-size:13px;
 }
+
 textarea{
     min-height:130px;
     resize:vertical;
     font-family:Consolas, monospace;
 }
+
 button.action{
     width:100%;
     padding:9px;
@@ -106,11 +115,15 @@ button.action{
     font-size:14px;
 }
 button.action:hover{ background:#1d4ed8; }
+
 .row{ display:flex; gap:10px; }
 .row > div{ flex:1; }
+
 .value{ font-weight:700; }
 .green{ color:#22c55e; }
 .red{ color:#ef4444; }
+
+/* Aiškūs checkbox'ai */
 .checkbox-clean {
     display:flex;
     flex-direction:column;
@@ -131,6 +144,7 @@ button.action:hover{ background:#1d4ed8; }
     width:16px;
     height:16px;
 }
+
 .pdf-controls{
     margin-top:12px;
     display:flex;
@@ -142,6 +156,8 @@ button.action:hover{ background:#1d4ed8; }
     width:auto;
     min-width:140px;
 }
+
+/* Naujas mėlynas "Naujas skaičiavimas" mygtukas */
 .clear-row{
     margin-top:8px;
     text-align:right;
@@ -159,49 +175,16 @@ button.clear-btn{
 button.clear-btn:hover{
     background:#1d4ed8;
 }
-.about-wrap{
-    max-width:1200px;
-    margin:12px auto 0;
-    padding:0 16px;
-    text-align:right;
-}
-.about-toggle{
-    padding:6px 14px;
-    border:none;
-    border-radius:999px;
-    background:#1e293b;
-    color:#e5e7eb;
-    font-size:12px;
-    font-weight:700;
-    cursor:pointer;
-}
-.about-toggle:hover{
-    background:#0f172a;
-}
-.about{
-    max-width:1200px;
-    margin:10px auto 0;
-    padding:16px;
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:12px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.12);
-    display:none;
-    font-size:13px;
-    line-height:1.55;
-}
-.about h2{ margin:0 0 8px 0; font-size:18px; }
-.about h3{ margin:14px 0 6px 0; font-size:15px; }
-.about ul{ margin:6px 0 0 0; padding-left:18px; }
-.about hr{ border:none; border-top:1px solid var(--border); margin:14px 0; }
+
 @media print{
     body{ background:#ffffff; color:#000000; }
-    header, .pdf-controls, .about-wrap, #aboutBox{ display:none !important; }
+    header, .pdf-controls{ display:none !important; }
     .card{ box-shadow:none; border:1px solid #e5e7eb; }
     body.pdf-calc #clientCard{ display:none !important; }
     body.pdf-client #calcCard{ display:none !important; }
     body.pdf-both #calcCard, body.pdf-both #clientCard{ display:block !important; }
 }
+
 .signature{
     text-align:center;
     color:#888;
@@ -217,57 +200,24 @@ button.clear-btn:hover{
 <header>
     <h1>Insurance Calculator (Auto Currency)</h1>
     <div class="spacer"></div>
-    <button onclick="toggleAbout()" title="Apie projektą">ℹ️</button>
     <button onclick="toggleDark()">🌙 / ☀️</button>
 </header>
 
-<div class="about-wrap">
-    <button class="about-toggle" onclick="toggleAbout()">ℹ️ Apie projektą / README</button>
-</div>
-
-<div class="about" id="aboutBox">
-    <h2>Insurance Calculator (Auto Currency)</h2>
-
-    <p><strong>Autorius / Author:</strong> Donatas Vitenas<br>
-    <strong>Statusas / Status:</strong> Veikiantis prototipas / Working prototype<br>
-    <strong>Veikimo principas:</strong> naršyklėje, naudojant Frankfurter API / ECB valiutų kursus.</p>
-
-    <hr>
-
-    <h3>LT</h3>
-    <p>
-        Šis įrankis automatiškai konvertuoja invoice sumą į EUR, apskaičiuoja brokerio savikainą,
-        kainą klientui ir pelną.
-    </p>
-
-    <h3>EN</h3>
-    <p>
-        This tool automatically converts invoice value to EUR and calculates broker cost,
-        client price and profit.
-    </p>
-
-    <p><strong>© Donatas Vitenas</strong></p>
-</div>
-
 <div class="container">
 
+    <!-- SKAIČIUOKLĖ -->
     <div class="card" id="calcCard">
         <h2>Skaičiuoklė</h2>
 
         <label>Invoice valiuta</label>
         <select id="invoiceCurrency">
             <option>USD</option>
-            <option>EUR</option>
             <option>GBP</option>
             <option>PLN</option>
-            <option>CHF</option>
-            <option>CNY</option>
             <option>CAD</option>
             <option>AUD</option>
-            <option>NOK</option>
-            <option>SEK</option>
-            <option>JPY</option>
-            <option>DKK</option>
+            <option>CHF</option>
+            <option>CNY</option>
         </select>
 
         <label>Invoice suma (ta valiuta)</label>
@@ -275,7 +225,9 @@ button.clear-btn:hover{
 
         <label>Invoice suma EUR (automatiškai per ECB)</label>
         <input type="number" id="invoiceEUR" readonly style="background:#e2e8f0;">
+        <div id="rateStatus" style="margin-top:6px;font-size:12px;min-height:16px;color:#16a34a;"></div>
 
+        <!-- Naujas mygtukas -->
         <div class="clear-row">
             <button type="button" class="clear-btn" onclick="resetAll()">Naujas skaičiavimas</button>
         </div>
@@ -326,6 +278,7 @@ button.clear-btn:hover{
         <p>Legator 0,10 %: <span id="resLeg" class="value">–</span></p>
     </div>
 
+    <!-- KLIENTO TEKSTAS -->
     <div class="card" id="clientCard">
         <h2>Tekstas klientui</h2>
 
@@ -347,18 +300,13 @@ button.clear-btn:hover{
 
         <label>Pasirink papildomą valiutą</label>
         <select id="extraCurrency">
-            <option value="EUR">EUR</option>
             <option value="USD">USD</option>
             <option value="GBP">GBP</option>
             <option value="PLN">PLN</option>
-            <option value="CHF">CHF</option>
-            <option value="CNY">CNY</option>
             <option value="CAD">CAD</option>
             <option value="AUD">AUD</option>
-            <option value="NOK">NOK</option>
-            <option value="SEK">SEK</option>
-            <option value="JPY">JPY</option>
-            <option value="DKK">DKK</option>
+            <option value="CHF">CHF</option>
+            <option value="CNY">CNY</option>
         </select>
 
         <button class="action" onclick="generateClientText()">Generuoti tekstą klientui</button>
@@ -381,270 +329,154 @@ button.clear-btn:hover{
 </div>
 
 <script>
-let lastClientEUR = null;
+let lastClientEUR=null;
+let requestId=0;
+const rateCache=new Map();
+const supported=new Set(["USD","GBP","PLN","CAD","AUD","CHF","CNY"]);
 
 function toggleDark(){
-    document.body.classList.toggle("dark");
-    localStorage.setItem("dark", document.body.classList.contains("dark"));
+  document.body.classList.toggle("dark");
+  localStorage.setItem("dark",document.body.classList.contains("dark"));
 }
 if(localStorage.getItem("dark")==="true") document.body.classList.add("dark");
 
-function toggleAbout(){
-    const box = document.getElementById("aboutBox");
-    box.style.display = (box.style.display === "block") ? "none" : "block";
+function num(v){return Number(String(v).trim().replace(",","."));}
+function status(msg,error=false){
+  const el=document.getElementById("rateStatus");
+  el.textContent=msg;
+  el.style.color=error?"#ef4444":"#16a34a";
 }
-
-function parseNumber(value){
-    if(value === null || value === undefined) return NaN;
-    return parseFloat(String(value).replace(",", "."));
+function csv(line){
+  const out=[]; let cur="",q=false;
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(c==='"'){
+      if(q&&line[i+1]==='"'){cur+='"';i++;} else q=!q;
+    }else if(c===","&&!q){out.push(cur);cur="";} else cur+=c;
+  }
+  out.push(cur); return out;
 }
-
-async function getRate(from, to){
-    if(from === to) return 1;
-
-    try{
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 6000);
-
-        const res = await fetch(`https://api.frankfurter.app/latest?from=${from}&to=${to}`, {
-            signal: controller.signal
-        });
-
-        clearTimeout(timeout);
-
-        if(!res.ok){
-            console.error("API HTTP klaida:", res.status);
-            return null;
-        }
-
-        const data = await res.json();
-
-        if(data && data.rates && data.rates[to]){
-            return Number(data.rates[to]);
-        }
-
-        return null;
-    }catch(e){
-        console.error("Kurso gavimo klaida:", e);
-        return null;
-    }
+async function getEcbRate(currency){
+  if(!supported.has(currency)) throw new Error("Nepalaikoma valiuta");
+  if(rateCache.has(currency)) return rateCache.get(currency);
+  const url=`https://data-api.ecb.europa.eu/service/data/EXR/D.${currency}.EUR.SP00.A?format=csvdata&lastNObservations=1`;
+  const r=await fetch(url,{cache:"no-store"});
+  if(!r.ok) throw new Error(`ECB HTTP ${r.status}`);
+  const lines=(await r.text()).replace(/^\uFEFF/,"").split(/\r?\n/).filter(x=>x.trim());
+  if(lines.length<2) throw new Error("Tuščias ECB atsakymas");
+  const h=csv(lines[0]),v=csv(lines[lines.length-1]);
+  const ri=h.indexOf("OBS_VALUE"),di=h.indexOf("TIME_PERIOD");
+  if(ri<0||di<0) throw new Error("Netikėtas ECB formatas");
+  const rate=Number(v[ri]),date=v[di];
+  if(!Number.isFinite(rate)||rate<=0||!date) throw new Error("Blogas ECB kursas");
+  const result={rate,date}; rateCache.set(currency,result); return result;
 }
-
 async function autoConvert(){
-    const cur = document.getElementById("invoiceCurrency").value;
-    const amt = parseNumber(document.getElementById("invoiceAmount").value);
-    const out = document.getElementById("invoiceEUR");
-
-    if(!amt || amt <= 0){
-        out.value = "";
-        return null;
-    }
-
-    if(cur === "EUR"){
-        out.value = amt.toFixed(2);
-        return amt;
-    }
-
-    const rate = await getRate(cur, "EUR");
-
-    if(!rate){
-        out.value = "";
-        return null;
-    }
-
-    const eur = amt * rate;
-    out.value = eur.toFixed(2);
-    return eur;
+  const id=++requestId;
+  const cur=document.getElementById("invoiceCurrency").value;
+  const amount=num(document.getElementById("invoiceAmount").value);
+  const out=document.getElementById("invoiceEUR");
+  lastClientEUR=null;
+  document.getElementById("clientText").value="";
+  if(!Number.isFinite(amount)||amount<=0){out.value="";status("");return false;}
+  out.value="";status("Gaunamas ECB kursas...");
+  try{
+    const {rate,date}=await getEcbRate(cur);
+    if(id!==requestId) return false;
+    out.value=(amount/rate).toFixed(2);
+    status(`ECB kursas (${date}): 1 EUR = ${rate.toFixed(4)} ${cur}`);
+    return true;
+  }catch(e){
+    if(id!==requestId) return false;
+    out.value="";status("Nepavyko gauti ECB kurso. Patikrink internetą ir bandyk dar kartą.",true);
+    console.error(e); return false;
+  }
 }
+document.getElementById("invoiceCurrency").addEventListener("change",autoConvert);
+let timer;
+document.getElementById("invoiceAmount").addEventListener("input",()=>{clearTimeout(timer);timer=setTimeout(autoConvert,250);});
 
-document.getElementById("invoiceCurrency").addEventListener("change", autoConvert);
-document.getElementById("invoiceAmount").addEventListener("input", autoConvert);
-
-document.getElementById("brokerPercent").addEventListener("change", function () {
-    const c = document.getElementById("brokerCustom");
-    c.disabled = (this.value !== "custom");
-    if(c.disabled) c.value = "";
+document.getElementById("brokerPercent").addEventListener("change",function(){
+  const c=document.getElementById("brokerCustom"); c.disabled=this.value!=="custom"; if(c.disabled)c.value="";
 });
-
-document.getElementById("myPercent").addEventListener("change", function () {
-    const c = document.getElementById("myCustom");
-    c.disabled = (this.value !== "custom");
-    if(c.disabled) c.value = "";
+document.getElementById("myPercent").addEventListener("change",function(){
+  const c=document.getElementById("myCustom"); c.disabled=this.value!=="custom"; if(c.disabled)c.value="";
 });
-
-function getPercent(selectId, customId){
-    let v = document.getElementById(selectId).value;
-
-    if(v === "custom"){
-        v = parseNumber(document.getElementById(customId).value);
-    }else{
-        v = parseNumber(v);
-    }
-
-    if(isNaN(v)) return NaN;
-
-    return v / 100;
+function pct(selectId,customId){
+  const s=document.getElementById(selectId).value;
+  const p=num(s==="custom"?document.getElementById(customId).value:s);
+  return Number.isFinite(p)?p/100:NaN;
 }
-
 async function calc(){
-    let eur = parseNumber(document.getElementById("invoiceEUR").value);
-
-    if(!eur || eur <= 0){
-        eur = await autoConvert();
-    }
-
-    if(!eur || eur <= 0){
-        alert("Nepavyko konvertuoti valiutos į EUR. Patikrink internetą arba atidaryk per GitHub Pages, ne per file://.");
-        return;
-    }
-
-    const b = getPercent("brokerPercent", "brokerCustom");
-    const m = getPercent("myPercent", "myCustom");
-
-    if(isNaN(b) || isNaN(m)){
-        alert("Įvesk procentą teisingu formatu: pvz. 0.30 arba 0,30");
-        return;
-    }
-
-    const cost = eur * b;
-    const client = eur * m;
-    const profit = client - cost;
-
-    lastClientEUR = client;
-
-    document.getElementById("resInvoiceEUR").textContent = eur.toFixed(2) + " EUR";
-    document.getElementById("resCost").textContent = cost.toFixed(2) + " EUR";
-    document.getElementById("resClient").textContent = client.toFixed(2) + " EUR";
-
-    const pe = document.getElementById("resProfit");
-    pe.textContent = profit.toFixed(2) + " EUR";
-    pe.className = "value " + (profit >= 0 ? "green" : "red");
-
-    document.getElementById("resAON").textContent = (eur * 0.0007).toFixed(2) + " EUR";
-    document.getElementById("resLeg").textContent = (eur * 0.001).toFixed(2) + " EUR";
-
-    document.getElementById("clientText").value = "";
+  let eur=num(document.getElementById("invoiceEUR").value);
+  if(!Number.isFinite(eur)||eur<=0){if(!await autoConvert())return;eur=num(document.getElementById("invoiceEUR").value);}
+  const b=pct("brokerPercent","brokerCustom"),m=pct("myPercent","myCustom");
+  if(!Number.isFinite(b)||!Number.isFinite(m)){alert("Įvesk procentą teisingu formatu, pvz. 0,30");return;}
+  const cost=eur*b,client=eur*m,profit=client-cost; lastClientEUR=client;
+  document.getElementById("resInvoiceEUR").textContent=eur.toFixed(2)+" EUR";
+  document.getElementById("resCost").textContent=cost.toFixed(2)+" EUR";
+  document.getElementById("resClient").textContent=client.toFixed(2)+" EUR";
+  const pe=document.getElementById("resProfit"); pe.textContent=profit.toFixed(2)+" EUR"; pe.className="value "+(profit>=0?"green":"red");
+  document.getElementById("resAON").textContent=(eur*0.0007).toFixed(2)+" EUR";
+  document.getElementById("resLeg").textContent=(eur*0.001).toFixed(2)+" EUR";
+  document.getElementById("clientText").value="";
 }
-
-async function generateClientText() {
-    if (!lastClientEUR) {
-        alert("Pirmiausia apskaičiuok kainą");
-        return;
-    }
-
-    const eur = lastClientEUR;
-    const showEUR = document.getElementById("showEUR").checked;
-    const showExtra = document.getElementById("showExtra").checked;
-    const showDate = document.getElementById("showDate").checked;
-    const showInvoice = document.getElementById("showInvoice").checked;
-
-    const amt = document.getElementById("invoiceAmount").value;
-    const invCur = document.getElementById("invoiceCurrency").value;
-    const lang = document.getElementById("lang").value;
-    const extraCur = document.getElementById("extraCurrency").value;
-
-    const today = new Date().toISOString().split("T")[0];
-
-    let extraAmount = null;
-    let extraRateAvailable = false;
-
-    if(showExtra){
-        try{
-            const rate = await getRate("EUR", extraCur);
-
-            if(rate && !isNaN(rate)){
-                extraAmount = eur * rate;
-                extraRateAvailable = true;
-            }
-        }catch(e){
-            console.error("Papildomos valiutos klaida:", e);
-        }
-    }
-
-    let out = "";
-
-    if (lang === "LT") {
-        out += "Siunčiame preliminarią draudimo įmokos kainą pagal pateiktą invoice vertę.\n\n";
-        if (showEUR) out += `• Draudimo kaina: ${eur.toFixed(2)} EUR\n`;
-        if (showExtra && extraRateAvailable) out += `• Suma ${extraCur} pagal šiandienos kursą: ${extraAmount.toFixed(2)} ${extraCur}\n`;
-        if (showExtra && !extraRateAvailable) out += `• Papildomos valiutos (${extraCur}) kursas šiuo metu negautas, todėl rodoma tik EUR kaina\n`;
-        if (showInvoice && amt) out += `• Invoice vertė: ${amt} ${invCur}\n`;
-        if (showDate) out += `• Data: ${today}\n`;
-        out += "\nPastaba:\nTai orientacinė įmoka, paskaičiuota pagal invoice vertę ir šiandienos valiutos kursą.\nGalutinė kaina gali skirtis priklausomai nuo poliso išrašymo dienos.\n";
-    }
-
-    if (lang === "EN") {
-        out += "Please find below the preliminary insurance premium calculated based on the provided invoice value.\n\n";
-        if (showEUR) out += `• Insurance price: ${eur.toFixed(2)} EUR\n`;
-        if (showExtra && extraRateAvailable) out += `• Amount in ${extraCur} at today’s rate: ${extraAmount.toFixed(2)} ${extraCur}\n`;
-        if (showExtra && !extraRateAvailable) out += `• Additional currency rate (${extraCur}) is currently unavailable, therefore only EUR price is shown\n`;
-        if (showInvoice && amt) out += `• Invoice value: ${amt} ${invCur}\n`;
-        if (showDate) out += `• Date: ${today}\n`;
-        out += "\nNote:\nThis is an indicative premium based on the invoice value and current exchange rate.\nThe final amount may vary depending on the policy issuance date.\n";
-    }
-
-    if (lang === "RU") {
-        out += "Ниже указана предварительная стоимость страховой премии, рассчитанная на основе суммы инвойса.\n\n";
-        if (showEUR) out += `• Стоимость страховки: ${eur.toFixed(2)} EUR\n`;
-        if (showExtra && extraRateAvailable) out += `• Сумма в ${extraCur} по текущему курсу: ${extraAmount.toFixed(2)} ${extraCur}\n`;
-        if (showExtra && !extraRateAvailable) out += `• Курс дополнительной валюты (${extraCur}) сейчас недоступен, поэтому указана только цена в EUR\n`;
-        if (showInvoice && amt) out += `• Сумма инвойса: ${amt} ${invCur}\n`;
-        if (showDate) out += `• Дата: ${today}\n`;
-        out += "\nПримечание:\nЭто ориентировочная премия, рассчитанная по сумме инвойса и текущему курсу.\nФактическая стоимость может отличаться в зависимости от даты оформления полиса.\n";
-    }
-
-    document.getElementById("clientText").value = out;
+async function generateClientText(){
+  if(!Number.isFinite(lastClientEUR)||lastClientEUR<=0){alert("Pirmiausia paspausk „Skaičiuoti“");return;}
+  const eur=lastClientEUR,showEUR=document.getElementById("showEUR").checked,showExtra=document.getElementById("showExtra").checked;
+  const showDate=document.getElementById("showDate").checked,showInvoice=document.getElementById("showInvoice").checked;
+  const amount=document.getElementById("invoiceAmount").value,invCur=document.getElementById("invoiceCurrency").value;
+  const lang=document.getElementById("lang").value,extraCur=document.getElementById("extraCurrency").value;
+  const today=new Date().toISOString().split("T")[0]; let extra=null;
+  if(showExtra){try{extra=eur*(await getEcbRate(extraCur)).rate;}catch(e){console.error(e);alert("Nepavyko gauti papildomos valiutos ECB kurso");return;}}
+  let out="";
+  if(lang==="LT"){
+    out+="Siunčiame preliminarią draudimo įmokos kainą pagal pateiktą invoice vertę.\n\n";
+    if(showEUR)out+=`• Draudimo kaina: ${eur.toFixed(2)} EUR\n`;
+    if(showExtra)out+=`• Suma ${extraCur} pagal šiandienos kursą: ${extra.toFixed(2)} ${extraCur}\n`;
+    if(showInvoice&&amount)out+=`• Invoice vertė: ${amount} ${invCur}\n`;
+    if(showDate)out+=`• Data: ${today}\n`;
+    out+="\nPastaba:\nTai orientacinė įmoka, paskaičiuota pagal invoice vertę ir šiandienos valiutos kursą.\nGalutinė kaina gali skirtis priklausomai nuo poliso išrašymo dienos.\n";
+  }else if(lang==="EN"){
+    out+="Please find below the preliminary insurance premium calculated based on the provided invoice value.\n\n";
+    if(showEUR)out+=`• Insurance price: ${eur.toFixed(2)} EUR\n`;
+    if(showExtra)out+=`• Amount in ${extraCur} at today’s rate: ${extra.toFixed(2)} ${extraCur}\n`;
+    if(showInvoice&&amount)out+=`• Invoice value: ${amount} ${invCur}\n`;
+    if(showDate)out+=`• Date: ${today}\n`;
+    out+="\nNote:\nThis is an indicative premium based on the invoice value and current exchange rate.\nThe final amount may vary depending on the policy issuance date.\n";
+  }else{
+    out+="Ниже указана предварительная стоимость страховой премии, рассчитанная на основе суммы инвойса.\n\n";
+    if(showEUR)out+=`• Стоимость страховки: ${eur.toFixed(2)} EUR\n`;
+    if(showExtra)out+=`• Сумма в ${extraCur} по текущему курсу: ${extra.toFixed(2)} ${extraCur}\n`;
+    if(showInvoice&&amount)out+=`• Сумма инвойса: ${amount} ${invCur}\n`;
+    if(showDate)out+=`• Дата: ${today}\n`;
+    out+="\nПримечание:\nЭто ориентировочная премия, рассчитанная по сумме инвойса и текущему курсу.\nФактическая стоимость может отличаться в зависимости от даты оформления полиса.\n";
+  }
+  document.getElementById("clientText").value=out;
 }
-
-function copyClientText(){
-    const t = document.getElementById("clientText");
-    t.select();
-    document.execCommand("copy");
+async function copyClientText(){
+  const t=document.getElementById("clientText"); if(!t.value){alert("Nėra teksto kopijavimui");return;}
+  try{await navigator.clipboard.writeText(t.value);}catch(e){t.focus();t.select();document.execCommand("copy");}
 }
-
 function generatePDF(){
-    const m = document.getElementById("pdfMode").value;
-    document.body.classList.remove("pdf-calc","pdf-client","pdf-both");
-    document.body.classList.add("pdf-" + m);
-    window.print();
+  const m=document.getElementById("pdfMode").value;
+  document.body.classList.remove("pdf-calc","pdf-client","pdf-both");
+  document.body.classList.add("pdf-"+m); window.print();
 }
-
+window.addEventListener("afterprint",()=>document.body.classList.remove("pdf-calc","pdf-client","pdf-both"));
 function resetAll(){
-    document.getElementById("invoiceCurrency").value = "USD";
-    document.getElementById("invoiceAmount").value = "";
-    document.getElementById("invoiceEUR").value = "";
-
-    document.getElementById("brokerPercent").value = "0.07";
-    document.getElementById("brokerCustom").value = "";
-    document.getElementById("brokerCustom").disabled = true;
-
-    document.getElementById("myPercent").value = "0.24";
-    document.getElementById("myCustom").value = "";
-    document.getElementById("myCustom").disabled = true;
-
-    document.getElementById("resInvoiceEUR").textContent = "–";
-    document.getElementById("resCost").textContent = "–";
-    document.getElementById("resClient").textContent = "–";
-
-    const pe = document.getElementById("resProfit");
-    pe.textContent = "–";
-    pe.className = "value";
-
-    document.getElementById("resAON").textContent = "–";
-    document.getElementById("resLeg").textContent = "–";
-
-    document.getElementById("lang").value = "LT";
-    document.getElementById("showEUR").checked = true;
-    document.getElementById("showExtra").checked = true;
-    document.getElementById("showDate").checked = true;
-    document.getElementById("showInvoice").checked = true;
-    document.getElementById("extraCurrency").value = "EUR";
-    document.getElementById("clientText").value = "";
-    document.getElementById("pdfMode").value = "both";
-
-    lastClientEUR = null;
+  requestId++; document.getElementById("invoiceCurrency").value="USD"; document.getElementById("invoiceAmount").value="";
+  document.getElementById("invoiceEUR").value=""; status("");
+  document.getElementById("brokerPercent").value="0.07"; document.getElementById("brokerCustom").value=""; document.getElementById("brokerCustom").disabled=true;
+  document.getElementById("myPercent").value="0.24"; document.getElementById("myCustom").value=""; document.getElementById("myCustom").disabled=true;
+  ["resInvoiceEUR","resCost","resClient","resAON","resLeg"].forEach(id=>document.getElementById(id).textContent="–");
+  const pe=document.getElementById("resProfit"); pe.textContent="–"; pe.className="value";
+  document.getElementById("lang").value="LT"; ["showEUR","showExtra","showDate","showInvoice"].forEach(id=>document.getElementById(id).checked=true);
+  document.getElementById("extraCurrency").value="USD"; document.getElementById("clientText").value=""; document.getElementById("pdfMode").value="both";
+  lastClientEUR=null;
 }
 </script>
+
 
 <div class="signature">© Donatas</div>
 
