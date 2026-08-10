@@ -212,6 +212,7 @@ button.clear-btn:hover{
         <label>Invoice valiuta</label>
         <select id="invoiceCurrency">
             <option>USD</option>
+            <option>EUR</option>
             <option>GBP</option>
             <option>PLN</option>
             <option>CAD</option>
@@ -301,6 +302,7 @@ button.clear-btn:hover{
         <label>Pasirink papildomą valiutą</label>
         <select id="extraCurrency">
             <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
             <option value="GBP">GBP</option>
             <option value="PLN">PLN</option>
             <option value="CAD">CAD</option>
@@ -332,7 +334,7 @@ button.clear-btn:hover{
 let lastClientEUR=null;
 let requestId=0;
 const rateCache=new Map();
-const supported=new Set(["USD","GBP","PLN","CAD","AUD","CHF","CNY"]);
+const supported=new Set(["EUR","USD","GBP","PLN","CAD","AUD","CHF","CNY"]);
 
 function toggleDark(){
   document.body.classList.toggle("dark");
@@ -357,6 +359,7 @@ function csv(line){
   out.push(cur); return out;
 }
 async function getEcbRate(currency){
+  if(currency==="EUR") return {rate:1,date:null};
   if(!supported.has(currency)) throw new Error("Nepalaikoma valiuta");
   if(rateCache.has(currency)) return rateCache.get(currency);
   const url=`https://data-api.ecb.europa.eu/service/data/EXR/D.${currency}.EUR.SP00.A?format=csvdata&lastNObservations=1`;
@@ -379,6 +382,11 @@ async function autoConvert(){
   lastClientEUR=null;
   document.getElementById("clientText").value="";
   if(!Number.isFinite(amount)||amount<=0){out.value="";status("");return false;}
+  if(cur==="EUR"){
+    out.value=amount.toFixed(2);
+    status("Valiutos keitimas nereikalingas: 1 EUR = 1 EUR");
+    return true;
+  }
   out.value="";status("Gaunamas ECB kursas...");
   try{
     const {rate,date}=await getEcbRate(cur);
